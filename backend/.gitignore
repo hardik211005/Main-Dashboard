@@ -3,3 +3,4 @@ backend/data/users.json
 backend/data/blacklist.json
 
 backend/reset_login.py
+data/*.json
