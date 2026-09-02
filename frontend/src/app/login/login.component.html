@@ -1,0 +1,94 @@
+<div class="page-bg">
+  <div class="auth-shell">
+
+    <div class="form-panel">
+      <div class="brand-row">
+        <img src="images/jio-logo.png" alt="Jio" class="brand-logo" />
+        <div class="brand-text">
+          <div class="brand-title">Centralised RAN Network</div>
+          <div class="brand-sub">Insight &amp; Operations Centre</div>
+        </div>
+      </div>
+
+      <h1 class="heading">Welcome back</h1>
+      <p class="subheading">Please provide your information to proceed</p>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="field">
+          <label for="username">User Name</label>
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            placeholder="Enter your user name"
+            autocomplete="username"
+            [class.invalid]="username?.invalid && username?.touched"
+          />
+          <span class="error-msg" *ngIf="username?.invalid && username?.touched">User name is required</span>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="password-box">
+            <input
+              id="password"
+              [type]="hidePassword ? 'password' : 'text'"
+              formControlName="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              [class.invalid]="(password?.invalid && password?.touched) || loginError"
+              (input)="loginError = null"
+            />
+            <button
+              type="button"
+              class="eye-btn"
+              (click)="hidePassword = !hidePassword"
+              [attr.aria-label]="'Toggle password visibility'"
+            >
+              <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </div>
+          <span class="error-msg" *ngIf="password?.invalid && password?.touched">Password is required</span>
+          <span class="error-msg" *ngIf="loginError">{{ loginError }}</span>
+        </div>
+
+        <div class="form-row-between">
+          <label class="checkbox">
+            <input type="checkbox" formControlName="rememberMe" />
+            <span>Stay logged in</span>
+          </label>
+          <a routerLink="/forgot-password" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="full-width submit-btn"
+          [disabled]="loginForm.invalid || loading"
+        >
+          <mat-spinner *ngIf="loading" diameter="20" class="btn-spinner"></mat-spinner>
+          <span *ngIf="!loading">Login</span>
+        </button>
+      </form>
+
+      <p class="footer-text">New user? <a routerLink="/signup">Sign up</a></p>
+    </div>
+
+    <div class="promo-panel">
+      <div class="promo-content" [class.hidden]="!slideVisible">
+        <h2>{{ slides[currentSlide].title }}</h2>
+        <p>{{ slides[currentSlide].description }}</p>
+      </div>
+      <div class="dots">
+  <span
+    class="dot"
+    *ngFor="let s of slides; let i = index"
+    [class.active]="i === currentSlide"
+    (click)="goToSlide(i)"
+  ></span>
+</div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,205 @@
+<div class="dashboard-page">
+  <main class="dashboard-content">
+    <section class="top-row">
+      <div class="stats-grid">
+        <div class="stat-card" *ngFor="let s of stats">
+          <div class="stat-inner">
+            <div
+              class="stat-icon"
+              [ngStyle]="{ background: s.iconBg, color: s.iconColor }"
+            >
+              <mat-icon>{{ s.icon }}</mat-icon>
+            </div>
+
+            <div class="stat-text">
+              <div class="stat-label">{{ s.label }}</div>
+              <div class="stat-value">{{ s.value }}</div>
+              <div class="stat-subnote" *ngIf="s.subLabel">
+                {{ s.subLabel }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card chart-card availability-card">
+        <div class="card-header">
+          <h3>Node Availability</h3>
+
+          <div class="header-right">
+            <div class="legend-inline">
+              <span class="legend-item">
+                <span class="legend-dot down"></span>
+                Down
+              </span>
+
+              <span class="legend-item">
+                <span class="legend-dot up"></span>
+                Up
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-wrap availability-chart">
+          <canvas #nodeAvailabilityCanvas></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="bottom-row">
+      <div class="card table-card">
+        <div class="card-header">
+          <h3>Execution History</h3>
+
+          <select
+            class="circle-filter"
+            [(ngModel)]="selectedExecCircle"
+            (ngModelChange)="onExecCircleChange()"
+          >
+            <option [ngValue]="allCircles">All circles</option>
+            <option
+              *ngFor="let c of circleOptions"
+              [ngValue]="c.circleCode"
+            >
+              {{ c.circleName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="table-body">
+          <div class="exec-row" *ngFor="let row of executionHistory">
+            <div class="exec-info">
+              <a class="exec-id">{{ row.id }} | {{ row.subId }}</a>
+              <div class="exec-meta">
+                {{ row.action }} | {{ row.timestamp }}
+              </div>
+            </div>
+
+            <div class="exec-actions">
+              <div
+                class="exec-status"
+                [ngClass]="row.status.toLowerCase()"
+              >
+                <span
+                  *ngIf="row.status !== 'Running'"
+                  class="status-dot"
+                ></span>
+                <span
+                  *ngIf="row.status === 'Running'"
+                  class="running-spinner"
+                  aria-hidden="true"
+                ></span>
+                {{ row.status }}
+              </div>
+
+              <button
+                type="button"
+                class="exec-more-btn"
+                aria-label="More options"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="empty-state"
+            *ngIf="!loading && executionHistory.length === 0"
+          >
+            No executions found
+          </div>
+        </div>
+      </div>
+
+      <div class="card donut-card">
+        <div class="card-header">
+          <h3>Command Status Overview</h3>
+
+          <select
+            class="circle-filter"
+            [(ngModel)]="selectedCommandStatusCircle"
+            (ngModelChange)="onCommandStatusCircleChange()"
+          >
+            <option [ngValue]="allCircles">All circles</option>
+            <option
+              *ngFor="let c of circleOptions"
+              [ngValue]="c.circleCode"
+            >
+              {{ c.circleName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="donut-body">
+          <div class="chart-wrap donut-wrap">
+            <canvas #commandStatusCanvas></canvas>
+          </div>
+
+          <div class="donut-legend">
+            <div
+              class="donut-legend-item"
+              *ngFor="let s of commandStatus"
+            >
+              <span
+                class="legend-dot"
+                [ngStyle]="{ background: s.color }"
+              ></span>
+
+              <div>
+                <div class="legend-value">
+                  {{ s.value.toLocaleString() }}
+                </div>
+                <div class="legend-label">{{ s.label }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card chart-card commands-card">
+        <div class="card-header">
+          <h3>Commands per Node</h3>
+
+          <div class="header-right commands-header-right">
+            <div class="legend-inline clickable">
+              <button
+                type="button"
+                class="legend-item legend-button"
+                *ngFor="let item of commandsPerNodeLegend; let i = index"
+                (click)="toggleCommandsPerNodeDataset(i)"
+                [class.active]="!item.hidden"
+                [class.hidden]="item.hidden"
+                [attr.aria-pressed]="!item.hidden"
+              >
+                <span
+                  class="legend-dot interactive-dot"
+                  [style.--legend-color]="item.color"
+                ></span>
+                {{ item.label }}
+              </button>
+            </div>
+
+            <select
+              class="circle-filter commands-circle-filter"
+              [(ngModel)]="selectedCommandsPerNodeCircle"
+              (ngModelChange)="onCommandsPerNodeCircleChange()"
+            >
+              <option [ngValue]="allCircles">All circles</option>
+              <option
+                *ngFor="let c of circleOptions"
+                [ngValue]="c.circleCode"
+              >
+                {{ c.circleName }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="chart-wrap">
+          <canvas #commandsPerNodeCanvas></canvas>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

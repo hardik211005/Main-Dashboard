@@ -1,0 +1,58 @@
+<section class="card">
+  <div class="toolbar">
+    <div>
+      <h2>Role Details</h2>
+      <p>Configure roles and module-wise permissions.</p>
+    </div>
+    <div class="toolbar-actions">
+      <div class="search-box">
+        <mat-icon>search</mat-icon>
+        <input type="text" placeholder="Search here…" [value]="searchTerm()" (input)="onSearchInput($any($event.target).value)">
+      </div>
+      <a *appHasPermission="['UserManagement','write']" mat-raised-button class="primary" routerLink="/access-control/roles/create">
+        <mat-icon>add</mat-icon> Create Role
+      </a>
+    </div>
+  </div>
+
+  <div class="table-wrap" *ngIf="!loading() && !loadError()">
+    <table>
+      <thead>
+        <tr><th>Role Id</th><th>Role Name</th><th>Description</th><th class="actions">Action</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let role of filteredRoles()">
+          <td class="id">{{ role.id }}</td>
+          <td class="name">{{ role.roleName }}</td>
+          <td class="desc">{{ role.description || '—' }}</td>
+          <td class="actions">
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Role actions">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="edit(role)"><mat-icon>edit</mat-icon><span>Edit</span></button>
+              <button mat-menu-item *appHasPermission="['UserManagement','delete']" (click)="delete(role)">
+                <mat-icon>delete</mat-icon><span>Delete</span>
+              </button>
+            </mat-menu>
+          </td>
+        </tr>
+        <tr *ngIf="filteredRoles().length === 0">
+          <td colspan="4" class="empty">
+            {{ roles().length === 0 ? 'No roles found. Click "Create Role" to add one.' : 'No roles match your search.' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="loading" *ngIf="loading()">
+    <mat-icon class="spin">autorenew</mat-icon> Loading roles…
+  </div>
+
+  <div class="load-error" *ngIf="!loading() && loadError()">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ loadError() }}</p>
+    <button mat-stroked-button (click)="load()">Retry</button>
+  </div>
+</section>

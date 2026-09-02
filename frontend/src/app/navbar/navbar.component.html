@@ -1,0 +1,34 @@
+<mat-toolbar class="navbar">
+  <div class="brand">
+    <img src="images/jio-logo.png" alt="Jio" class="brand-logo" />
+    <div class="brand-text">
+      <span class="brand-title">Centralised RAN Network</span>
+      <span class="brand-sub">Insight &amp; Operations Centre</span>
+    </div>
+  </div>
+
+  <nav class="nav-links">
+    <a class="nav-item" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+    <a class="nav-item" routerLink="/ucem" routerLinkActive="active">UCEM</a>
+    <a class="nav-item" routerLink="/son" routerLinkActive="active">SON</a>
+    <a class="nav-item" routerLink="/ems" routerLinkActive="active">EMS</a>
+    <span class="nav-item disabled" title="Coming soon">Help</span>
+    <a *ngIf="canAccessUserManagement" class="nav-item" routerLink="/access-control" routerLinkActive="active">Access Control</a>
+  </nav>
+
+  <span class="spacer"></span>
+
+  <button type="button" class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'" [attr.title]="isDarkMode ? 'Light mode' : 'Dark mode'">
+    <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+
+  <button class="user-menu-trigger" [matMenuTriggerFor]="userMenu">
+    <div class="avatar" *ngIf="currentUser$ | async as user">{{ (user.name || user.username || '?').charAt(0).toUpperCase() }}</div>
+    <span class="user-name" *ngIf="currentUser$ | async as user">{{ user.name }}</span>
+    <mat-icon class="chevron">expand_more</mat-icon>
+  </button>
+
+  <mat-menu #userMenu="matMenu">
+    <button mat-menu-item (click)="onLogout()"><mat-icon>logout</mat-icon><span>Logout</span></button>
+  </mat-menu>
+</mat-toolbar>

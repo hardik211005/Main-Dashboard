@@ -1,0 +1,15 @@
+<div class="access-page">
+  <main class="access-content">
+    <ng-container *ngIf="!isFormPage()">
+      <div class="page-heading">
+        <div>
+          <h1>Access Control</h1>
+          <p>Manage roles, permissions and system users.</p>
+        </div>
+      </div>
+      <app-ac-tabs></app-ac-tabs>
+    </ng-container>
+
+    <router-outlet></router-outlet>
+  </main>
+</div>

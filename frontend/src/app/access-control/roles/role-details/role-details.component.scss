@@ -1,0 +1,30 @@
+.card { background:#fff; border:1px solid #e7eaf0; border-radius:14px; box-shadow:0 5px 18px rgba(25,35,65,.05); overflow:hidden; }
+.toolbar { padding:20px 22px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+.toolbar h2 { margin:0 0 5px; font-size:18px; } .toolbar p { margin:0; color:#7a8394; font-size:12px; }
+.toolbar-actions { display:flex; align-items:center; gap:12px; }
+.search-box { display:flex; align-items:center; gap:6px; background:#f5f6fb; border:1px solid #e2e5ee; border-radius:9px; padding:7px 12px; min-width:220px; }
+.search-box mat-icon { color:#9098ab; font-size:19px; height:19px; width:19px; }
+.search-box input { border:none; outline:none; background:transparent; font-size:13px; width:100%; color:#20283a; }
+.primary { background:#0d23b2!important; color:#fff!important; border-radius:44px!important; }
+.table-wrap { overflow:auto; }
+table { width:100%; border-collapse:collapse; }
+th { background:#eef0fc; color:#4a4f6b; font-size:13px; font-weight:700; text-align:left; padding:14px 24px; border-bottom:1px solid #dfe2ea; }
+th.actions, td.actions { text-align:right; padding-right:28px; }
+td { padding:16px 24px; border-bottom:1px solid #edf0f5; font-size:13.5px; color:#2f3648; }
+tbody tr:last-child td { border-bottom:none; }
+tbody tr:hover { background:#f8f9fd; }
+td.name { font-weight:600; color:#20283a; } td.id { color:#20283a; font-weight:600; }
+td.desc { color:#0d2081; }
+.actions { width:70px; }
+.empty,.loading { padding:35px; text-align:center; color:#8a93a3; }
+.loading { display:flex; align-items:center; justify-content:center; gap:8px; }
+.loading .spin { animation:spin 1s linear infinite; }
+@keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+.load-error { padding:35px; text-align:center; color:#a3413f; display:flex; flex-direction:column; align-items:center; gap:10px; }
+.load-error mat-icon { font-size:26px; height:26px; width:26px; }
+.load-error p { margin:0; max-width:420px; font-size:13px; }
+:host-context(.dark-theme) .card { background:#202a3b; border-color:#303b50; } :host-context(.dark-theme) td { color:#c3cbda; border-color:#303b50; } :host-context(.dark-theme) td.name { color:#fff; } :host-context(.dark-theme) th { background:#292f52; color:#d6daf0; border-color:#303b50; }
+:host-context(.dark-theme) .table-wrap { border-color:#303b50; }
+:host-context(.dark-theme) tbody tr:hover { background:#232f45; }
+:host-context(.dark-theme) td.desc { color:#8ea0f7; }
+:host-context(.dark-theme) .search-box { background:#242f47; border-color:#333f5c; } :host-context(.dark-theme) .search-box input { color:#e7ebf7; }

@@ -1,0 +1,70 @@
+<section class="card">
+  <div class="heading"><div><h2>{{ editingId ? 'Edit User' : 'Create User' }}</h2><p>Enter user information and assign a role.</p></div></div>
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-grid">
+      <!-- Row 1 -->
+      <label>First Name
+        <input formControlName="firstName" placeholder="First name" [class.invalid]="form.get('firstName')?.invalid && form.get('firstName')?.touched">
+        <span class="err" *ngIf="form.get('firstName')?.errors?.['required'] && form.get('firstName')?.touched">First name is required.</span>
+        <span class="err" *ngIf="form.get('firstName')?.errors?.['minlength'] && form.get('firstName')?.touched">At least 2 characters.</span>
+        <span class="err" *ngIf="form.get('firstName')?.errors?.['pattern'] && form.get('firstName')?.touched">Letters only, no numbers or symbols.</span>
+      </label>
+      <label>Middle Name <input formControlName="middleName" placeholder="Middle name"></label>
+      <label>Last Name
+        <input formControlName="lastName" placeholder="Last name" [class.invalid]="form.get('lastName')?.invalid && form.get('lastName')?.touched">
+        <span class="err" *ngIf="form.get('lastName')?.errors?.['required'] && form.get('lastName')?.touched">Last name is required.</span>
+        <span class="err" *ngIf="form.get('lastName')?.errors?.['minlength'] && form.get('lastName')?.touched">At least 2 characters.</span>
+        <span class="err" *ngIf="form.get('lastName')?.errors?.['pattern'] && form.get('lastName')?.touched">Letters only, no numbers or symbols.</span>
+      </label>
+      <label>Contact Number <input formControlName="contactNumber" placeholder="Mobile number"></label>
+
+      <!-- Row 2 -->
+      <label>Email ID
+        <input type="email" formControlName="email" placeholder="name@example.com" [class.invalid]="form.get('email')?.invalid && form.get('email')?.touched">
+        <span class="err" *ngIf="form.get('email')?.errors?.['required'] && form.get('email')?.touched">Email is required.</span>
+        <span class="err" *ngIf="form.get('email')?.errors?.['email'] && form.get('email')?.touched">Enter a valid email, e.g. name&#64;example.com.</span>
+      </label>
+      <label>Role Name
+        <select formControlName="roleId" [class.invalid]="form.get('roleId')?.invalid && form.get('roleId')?.touched">
+          <option value="">Select role</option>
+          <option *ngFor="let role of roles" [value]="role.id">{{ role.roleName }}</option>
+        </select>
+        <span class="err" *ngIf="form.get('roleId')?.invalid && form.get('roleId')?.touched">Please select a role.</span>
+      </label>
+      <label>Password
+        <div class="password-field">
+          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" [placeholder]="editingId ? 'Leave blank to keep current' : 'Password'" [class.invalid]="form.get('password')?.invalid && form.get('password')?.touched">
+          <button type="button" class="toggle-eye" (click)="showPassword = !showPassword" [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+            <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </div>
+        <span class="err" *ngIf="form.get('password')?.errors?.['required'] && form.get('password')?.touched">Password is required.</span>
+        <span class="err" *ngIf="form.get('password')?.errors?.['minlength'] && form.get('password')?.touched">Password must be at least 6 characters.</span>
+      </label>
+      <label>Confirm Password
+        <div class="password-field">
+          <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" placeholder="Confirm password" [class.invalid]="(form.get('confirmPassword')?.invalid || form.errors?.['mismatch']) && form.get('confirmPassword')?.touched">
+          <button type="button" class="toggle-eye" (click)="showConfirmPassword = !showConfirmPassword" [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'">
+            <mat-icon>{{ showConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </div>
+        <span class="err" *ngIf="form.get('confirmPassword')?.errors?.['required'] && form.get('confirmPassword')?.touched">Please confirm the password.</span>
+        <span class="err" *ngIf="form.errors?.['mismatch'] && form.get('confirmPassword')?.touched">Passwords do not match.</span>
+      </label>
+
+      <!-- Row 3 -->
+      <label>Group Name <input formControlName="groupName" placeholder="Group name"></label>
+      <label>EC ID <input formControlName="ecId" placeholder="EC ID (optional; auto-generated if blank)"></label>
+      <label>Account Expiry Date
+        <input type="date" formControlName="expiryDate" [min]="minExpiryDate" [class.invalid]="form.get('expiryDate')?.invalid && form.get('expiryDate')?.touched">
+        <span class="err" *ngIf="form.get('expiryDate')?.errors?.['minDate'] && form.get('expiryDate')?.touched">Expiry date must be tomorrow or later, not today.</span>
+      </label>
+    </div>
+    <div class="actions">
+      <a mat-stroked-button routerLink="/access-control/users">Cancel</a>
+      <span class="cta-wrap" (mouseenter)="revealMissingFields()">
+        <button mat-raised-button class="primary" type="submit" [disabled]="loading || form.invalid">{{ editingId ? 'Update User' : 'Create User' }}</button>
+      </span>
+    </div>
+  </form>
+</section>

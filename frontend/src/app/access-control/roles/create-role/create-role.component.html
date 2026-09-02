@@ -1,0 +1,39 @@
+<section class="page">
+  <h2>{{ editingId ? 'Edit Role' : 'Create Role' }}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <label class="field">
+      <span>Role Name</span>
+      <input formControlName="roleName" placeholder="Enter Name" [class.invalid]="form.get('roleName')?.invalid && form.get('roleName')?.touched">
+      <span class="err" *ngIf="form.get('roleName')?.invalid && form.get('roleName')?.touched">Role name is required.</span>
+    </label>
+
+    <label class="field">
+      <span>Description</span>
+      <input formControlName="description" placeholder="Type description here...">
+    </label>
+
+    <div class="permission-head">
+      <h3>Module wise Permissions</h3>
+      <label class="select-all">Select All <input type="checkbox" [checked]="allChecked()" (change)="toggleAll($any($event.target).checked)"></label>
+    </div>
+
+    <div class="permission-grid" formArrayName="permissions">
+      <div class="grid-row header"><div>Modules</div><div>Read</div><div>Write</div><div>Delete</div></div>
+      <div class="grid-row" *ngFor="let group of permissions.controls; let i=index" [formGroupName]="i">
+        <div class="module">
+          <input type="checkbox" [checked]="isModuleFullyChecked(group)" (change)="toggleModule(group, $any($event.target).checked)">
+          {{ moduleLabel(group.value.module) }}
+        </div>
+        <div><input type="checkbox" formControlName="read"></div>
+        <div><input type="checkbox" formControlName="write"></div>
+        <div><input type="checkbox" formControlName="delete"></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a mat-stroked-button routerLink="/access-control/roles">Cancel</a>
+      <button mat-raised-button class="primary" type="submit" [disabled]="loading">{{ editingId ? 'Update Role' : 'Create Role' }}</button>
+    </div>
+  </form>
+</section>

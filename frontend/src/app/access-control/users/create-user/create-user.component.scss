@@ -1,0 +1,115 @@
+.card {
+  background: #fff;
+  border: 1px solid #e7eaf0;
+  border-radius: 14px;
+  box-shadow: 0 5px 18px rgba(25, 35, 65, .05);
+  padding: 26px 30px 30px;
+  box-sizing: border-box;
+  margin-top: 40px;
+}
+
+.heading { margin-bottom: 22px; }
+.heading h2 { margin: 0 0 4px; font-size: 19px; font-weight: 800; color: #1c2436; }
+.heading p { margin: 0; color: #7a8394; font-size: 13px; }
+
+/* Fixed 4-column grid so fields fall into clean, evenly-spaced rows
+   (4 + 4 + 3) instead of one congested line with a big empty gap below. */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 26px 28px;
+}
+
+.form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #3d4658;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.form-grid input,
+.form-grid select {
+  height: 40px;
+  border: 1px solid #dfe3ea;
+  border-radius: 9px;
+  padding: 0 14px;
+  font: inherit;
+  font-weight: 700;
+  color: #122ac7;
+  background: #fff;
+  box-sizing: border-box;
+  outline: none;
+  width: 100%;
+}
+
+/* Bold navy placeholder + typed text, matching the reference screenshot
+   instead of the default light-grey browser placeholder. */
+.form-grid input::placeholder { color: #2f3ea0; font-weight: 700; opacity: 1; }
+.form-grid select { color: #2f3ea0; }
+
+.form-grid select { cursor: pointer; }
+
+.form-grid input:focus,
+.form-grid select:focus { border-color: #0b24b3; box-shadow: 0 0 0 3px rgba(82, 100, 209, .12); }
+
+.form-grid input.invalid,
+.form-grid select.invalid { border-color: #d64545; background: #fef5f5; }
+
+/* Password fields with a show/hide eye toggle */
+.password-field { position: relative; display: flex; }
+.password-field input { padding-right: 38px; }
+.toggle-eye {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6b7386;
+}
+.toggle-eye mat-icon { font-size: 18px; height: 18px; width: 18px; }
+.toggle-eye:hover { color: #4456c7; }
+
+.err { color: #d64545; font-weight: 400; font-size: 11px; }
+
+.actions { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 26px; }
+.actions a { border-radius: 20px !important; }
+.cta-wrap { display: inline-flex; } /* not disabled itself, so hover still fires even though the button inside is */
+.primary {
+  background: #051ba4 !important;
+  color: #fff !important;
+  border-radius: 20px !important;
+  padding: 0 22px !important;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+/* Greyed out while the form is incomplete/invalid; turns blue the instant
+   it becomes valid — the color change itself is the "why can't I submit"
+   signal, no separate text needed. */
+.primary:disabled {
+  background: #aab0c4 !important;
+  color: #f0f2f7 !important;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1100px) {
+  .form-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+:host-context(.dark-theme) .card { background: #202a3b; border-color: #303b50; }
+:host-context(.dark-theme) .heading h2 { color: #f1f4fb; }
+:host-context(.dark-theme) .form-grid label { color: #c3cbda; }
+:host-context(.dark-theme) .form-grid input,
+:host-context(.dark-theme) .form-grid select { background: #182131; color: #9fb0ff; border-color: #3a4559; }
+:host-context(.dark-theme) .form-grid input::placeholder { color: #9fb0ff; }
+:host-context(.dark-theme) .toggle-eye { color: #9aa4c0; }

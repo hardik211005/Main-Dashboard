@@ -1,0 +1,49 @@
+<section class="card">
+  <div class="toolbar">
+    <div><h2>User Details</h2><p>Manage system users and their assigned roles.</p></div>
+    <div class="toolbar-actions">
+      <div class="search-box">
+        <mat-icon>search</mat-icon>
+        <input type="text" placeholder="Search here…" [value]="searchTerm()" (input)="onSearchInput($any($event.target).value)">
+      </div>
+      <a *appHasPermission="['UserManagement','write']" mat-raised-button class="primary" routerLink="/access-control/users/create">
+        <mat-icon>person_add</mat-icon> Create User
+      </a>
+    </div>
+  </div>
+
+  <div class="table-wrap" *ngIf="!loading() && !loadError()">
+    <table>
+      <thead><tr><th>User Name</th><th>Email ID</th><th>EC ID</th><th>Mobile Number</th><th>Role</th><th>Expiry Date</th><th class="actions">Action</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let user of filteredUsers()">
+          <td class="name">{{ user.name }}</td><td>{{ user.email }}</td><td>{{ user.ecId || '—' }}</td>
+          <td>{{ user.mobileNumber || '—' }}</td><td><span class="role">{{ user.roleName || 'Viewer' }}</span></td>
+          <td>{{ user.expiryDate || '—' }}</td>
+          <td class="actions">
+            <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="edit(user)"><mat-icon>edit</mat-icon><span>Edit</span></button>
+              <button mat-menu-item *appHasPermission="['UserManagement','delete']" (click)="delete(user)"><mat-icon>delete</mat-icon><span>Delete</span></button>
+            </mat-menu>
+          </td>
+        </tr>
+        <tr *ngIf="filteredUsers().length === 0">
+          <td colspan="7" class="empty">
+            {{ users().length === 0 ? 'No users found. Click "Create User" to add one.' : 'No users match your search.' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="loading" *ngIf="loading()">
+    <mat-icon class="spin">autorenew</mat-icon> Loading users…
+  </div>
+
+  <div class="load-error" *ngIf="!loading() && loadError()">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ loadError() }}</p>
+    <button mat-stroked-button (click)="load()">Retry</button>
+  </div>
+</section>
