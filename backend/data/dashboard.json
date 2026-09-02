@@ -1,0 +1,65 @@
+{
+  "executionHistory": [
+    {
+      "executionId": "EXEC-100001",
+      "nodeId": "eNB_1278_eFemto",
+      "nodeName": "eNB_1278",
+      "scheduleName": "CHG-ANR-SCHED",
+      "scheduledAt": "2026-02-09T12:32:00+05:30",
+      "circle": "MH",
+      "status": "FAILED"
+    },
+    {
+      "executionId": "EXEC-100002",
+      "nodeId": "eNB_1279_eFemto",
+      "nodeName": "eNB_1279",
+      "scheduleName": "CHG-ANR-SCHED",
+      "scheduledAt": "2026-02-09T12:32:00+05:30",
+      "circle": "WB",
+      "status": "RUNNING"
+    },
+    {
+      "executionId": "EXEC-100003",
+      "nodeId": "eNB_1280_eFemto",
+      "nodeName": "eNB_1280",
+      "scheduleName": "CHG-ANR-SCHED",
+      "scheduledAt": "2026-02-09T12:32:00+05:30",
+      "circle": "GJ",
+      "status": "RUNNING"
+    },
+    {
+      "executionId": "EXEC-100004",
+      "nodeId": "eNB_1281_eFemto",
+      "nodeName": "eNB_1281",
+      "scheduleName": "CHG-ANR-SCHED",
+      "scheduledAt": "2026-02-09T12:35:00+05:30",
+      "circle": "AP",
+      "status": "SUCCESS"
+    }
+  ],
+  "commandsPerNode": [
+    { "nodeLabel": "Node 1", "success": 55, "failed": 20 },
+    { "nodeLabel": "Node 2", "success": 72, "failed": 30 },
+    { "nodeLabel": "Node 3", "success": 60, "failed": 25 },
+    { "nodeLabel": "Node 4", "success": 85, "failed": 35 },
+    { "nodeLabel": "Node 5", "success": 66, "failed": 28 },
+    { "nodeLabel": "Node 6", "success": 78, "failed": 22 },
+    { "nodeLabel": "Node 7", "success": 58, "failed": 18 },
+    { "nodeLabel": "Node 8", "success": 90, "failed": 15 }
+  ],
+  "circles": [
+    { "circleCode": "WB", "circleName": "West Bengal", "upNodes": 2180, "downNodes": 145, "totalNodes": 2325 },
+    { "circleCode": "AP", "circleName": "Andhra Pradesh", "upNodes": 1795, "downNodes": 122, "totalNodes": 1917 },
+    { "circleCode": "AS", "circleName": "Assam", "upNodes": 1502, "downNodes": 198, "totalNodes": 1700 },
+    { "circleCode": "BR", "circleName": "Bihar", "upNodes": 1688, "downNodes": 176, "totalNodes": 1864 },
+    { "circleCode": "GJ", "circleName": "Gujarat", "upNodes": 1995, "downNodes": 138, "totalNodes": 2133 },
+    { "circleCode": "HR", "circleName": "Haryana", "upNodes": 1420, "downNodes": 95, "totalNodes": 1515 },
+    { "circleCode": "MH", "circleName": "Maharashtra", "upNodes": 2350, "downNodes": 160, "totalNodes": 2510 }
+  ],
+  "statusBreakdown": [
+    { "status": "LIVE", "count": 2734, "colorHex": "#22C55E" },
+    { "status": "ALARM", "count": 68, "colorHex": "#F59E0B" },
+    { "status": "DOWN", "count": 31, "colorHex": "#EF4444" },
+    { "status": "UNKNOWN", "count": 14, "colorHex": "#9CA3AF" }
+  ]
+}

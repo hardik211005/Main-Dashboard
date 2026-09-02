@@ -1,0 +1,247 @@
+[
+  {
+    "id": "RID001",
+    "roleName": "Admin",
+    "description": "Full access to all modules.",
+    "permissions": [
+      {
+        "module": "CNOC",
+        "read": true,
+        "write": true,
+        "delete": true
+      },
+      {
+        "module": "Dashboard",
+        "read": true,
+        "write": true,
+        "delete": true
+      },
+      {
+        "module": "UCEM",
+        "read": true,
+        "write": true,
+        "delete": true
+      },
+      {
+        "module": "SON",
+        "read": true,
+        "write": true,
+        "delete": true
+      },
+      {
+        "module": "EMS",
+        "read": true,
+        "write": true,
+        "delete": true
+      },
+      {
+        "module": "Help",
+        "read": true,
+        "write": true,
+        "delete": true
+      },
+      {
+        "module": "UserManagement",
+        "read": true,
+        "write": true,
+        "delete": true
+      }
+    ]
+  },
+  {
+    "id": "RID002",
+    "roleName": "Viewer",
+    "description": "Read-only access to the dashboard.",
+    "permissions": [
+      {
+        "module": "CNOC",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "Dashboard",
+        "read": true,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "UCEM",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "SON",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "EMS",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "Help",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "UserManagement",
+        "read": false,
+        "write": false,
+        "delete": false
+      }
+    ]
+  },
+  {
+    "id": "RID003",
+    "roleName": "test",
+    "description": "test",
+    "permissions": [
+      {
+        "module": "CNOC",
+        "read": true,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "Dashboard",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "UCEM",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "SON",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "EMS",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "Help",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "UserManagement",
+        "read": false,
+        "write": false,
+        "delete": false
+      }
+    ]
+  },
+  {
+    "id": "RID004",
+    "roleName": "demo",
+    "description": "demo",
+    "permissions": [
+      {
+        "module": "CNOC",
+        "read": true,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "Dashboard",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "UCEM",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "SON",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "EMS",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "Help",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "UserManagement",
+        "read": false,
+        "write": false,
+        "delete": false
+      }
+    ]
+  },
+  {
+    "id": "RID005",
+    "roleName": "test 2",
+    "description": "test 2",
+    "permissions": [
+      {
+        "module": "CNOC",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "Dashboard",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "UCEM",
+        "read": true,
+        "write": true,
+        "delete": true
+      },
+      {
+        "module": "SON",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "EMS",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "Help",
+        "read": false,
+        "write": false,
+        "delete": false
+      },
+      {
+        "module": "UserManagement",
+        "read": false,
+        "write": false,
+        "delete": false
+      }
+    ]
+  }
+]

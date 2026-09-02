@@ -1,0 +1,11 @@
+[
+  {
+    "id": "5805bdff-ec02-4e45-aa44-f5d1d2fcce7e",
+    "name": "Hardik",
+    "email": "hardikdhameeja2105@gmail.com",
+    "department": "Engineering",
+    "position": "intern",
+    "salary": 20000,
+    "createdAt": "2026-08-18T11:10:40.529202+00:00"
+  }
+]
