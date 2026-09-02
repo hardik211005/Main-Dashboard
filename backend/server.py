@@ -7,6 +7,9 @@ import uuid
 from functools import wraps
 from datetime import datetime, timedelta, timezone
 
+from dotenv import load_dotenv
+load_dotenv()
+
 import bcrypt
 import jwt
 from flask import Flask, request, jsonify
