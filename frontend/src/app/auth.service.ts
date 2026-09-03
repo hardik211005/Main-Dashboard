@@ -1,3 +1,4 @@
+import { environment } from '../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -22,7 +23,7 @@ export interface AuthResponse {
   user: AuthUser;
 }
 
-const API_URL = 'http://127.0.0.1:5050/api';
+const API_URL = environment.apiUrl;
 const TOKEN_KEY = 'auth_token';
 const USER_KEY = 'auth_user';
 

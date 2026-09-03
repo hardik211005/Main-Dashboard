@@ -1,6 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Subject } from 'rxjs';
 import { AuthService } from '../auth.service';
+import { environment } from '../../environments/environment';
 
 export interface DashboardSocketEvent {
   type?: string;
@@ -42,8 +43,9 @@ export class WebSocketService {
     const token = this.authService.getToken();
     if (!token) return;
 
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    this.socket = new WebSocket(`${protocol}//127.0.0.1:5050/ws`);
+    // environment.wsUrl already carries the right scheme (ws/wss) for
+    // local dev vs production, so no need to sniff window.location here.
+    this.socket = new WebSocket(environment.wsUrl);
 
     this.socket.onopen = () => {
       this.socket?.send(JSON.stringify({ type: 'auth', token }));
@@ -65,6 +67,7 @@ export class WebSocketService {
     };
 
     this.socket.onerror = () => {
+      // Dashboard data remains available through the normal REST API.
     };
   }
 

@@ -1,3 +1,4 @@
+import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -40,13 +41,13 @@ export interface DashboardData {
   statusBreakdown: StatusBreakdownItem[];
 }
 
-const API_URL = 'http://127.0.0.1:5050/api';
+const API_URL = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
-  private apiUrl = 'http://127.0.0.1:5050/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private http: HttpClient,
