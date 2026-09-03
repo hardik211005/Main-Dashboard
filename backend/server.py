@@ -706,4 +706,6 @@ def delete_employee(employee_id):
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5050, debug=True, threaded=True, use_reloader=False)
+    port = int(os.environ.get("PORT", 5050))
+    debug = os.environ.get("FLASK_DEBUG", "0") == "1"
+    app.run(host="0.0.0.0", port=port, debug=debug, threaded=True, use_reloader=False)
