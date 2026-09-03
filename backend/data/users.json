@@ -1,0 +1,11 @@
+[
+  {
+    "id": "admin-seed-001",
+    "name": "Hardik Admin",
+    "username": "admin",
+    "email": "admin@jio.com",
+    "password": "$2b$12$kAw2N9MYBlRxmiqFNoDUx.k65Z0WjzBphHcKTUue7WuSzpxvOv.Di",
+    "roleId": "RID001",
+    "createdAt": "2026-09-03T00:00:00+00:00"
+  }
+]
