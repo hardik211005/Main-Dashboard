@@ -3,18 +3,21 @@ import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, map, startWith } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { AcTabsComponent } from './shared/ac-tabs.component';
 
 @Component({
   selector: 'app-access-control',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, AcTabsComponent],
+  imports: [CommonModule, RouterOutlet],
   templateUrl: './access-control.component.html',
   styleUrl: './access-control.component.scss'
 })
 export class AccessControlComponent {
   private router = inject(Router);
 
+  // Hide the shared "Access Control" heading on the dedicated create/edit
+  // forms so they render as their own full page, matching the standalone
+  // Create Role / Create User screens in the design. Switching between
+  // Roles and Users now happens from the navbar dropdown, not page tabs.
   isFormPage = toSignal(
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),

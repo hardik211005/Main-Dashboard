@@ -7,9 +7,10 @@
           <p>Manage roles, permissions and system users.</p>
         </div>
       </div>
-      <app-ac-tabs></app-ac-tabs>
     </ng-container>
 
-    <router-outlet></router-outlet>
+    <div [class.form-page-wrap]="isFormPage()">
+      <router-outlet></router-outlet>
+    </div>
   </main>
 </div>

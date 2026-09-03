@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, filter, takeUntil } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { PermissionService } from '../access-control/services/permission.service';
 
@@ -19,7 +19,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
   currentUser$;
   isDarkMode = false;
 
+  // Resolved once per permissions change instead of calling a method from
+  // the template (template method calls re-run on every change-detection
+  // pass, which adds up on a navbar that's now shared across pages).
   canAccessUserManagement = false;
+  isAccessControlActive = false;
 
   private destroy$ = new Subject<void>();
 
@@ -40,6 +44,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.canAccessUserManagement = this.permissionService.can('UserManagement', 'read');
+      });
+
+    // The Access Control nav item is now a dropdown button (Roles/Users),
+    // not a routerLink, so routerLinkActive can't highlight it for us —
+    // track the active state ourselves from the current URL instead.
+    this.isAccessControlActive = this.router.url.startsWith('/access-control');
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(event => {
+        this.isAccessControlActive = event.urlAfterRedirects.startsWith('/access-control');
       });
   }
 

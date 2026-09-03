@@ -13,8 +13,22 @@
     <a class="nav-item" routerLink="/son" routerLinkActive="active">SON</a>
     <a class="nav-item" routerLink="/ems" routerLinkActive="active">EMS</a>
     <span class="nav-item disabled" title="Coming soon">Help</span>
-    <a *ngIf="canAccessUserManagement" class="nav-item" routerLink="/access-control" routerLinkActive="active">Access Control</a>
+    <button
+      type="button"
+      class="nav-item nav-dropdown"
+      *ngIf="canAccessUserManagement"
+      [class.active]="isAccessControlActive"
+      [matMenuTriggerFor]="accessControlMenu"
+    >
+      Access Control
+      <mat-icon class="nav-chevron">expand_more</mat-icon>
+    </button>
   </nav>
+
+  <mat-menu #accessControlMenu="matMenu">
+    <button mat-menu-item routerLink="/access-control/roles"><mat-icon>admin_panel_settings</mat-icon><span>Roles</span></button>
+    <button mat-menu-item routerLink="/access-control/users"><mat-icon>group</mat-icon><span>Users</span></button>
+  </mat-menu>
 
   <span class="spacer"></span>
 
