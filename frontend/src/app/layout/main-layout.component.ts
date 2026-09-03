@@ -20,11 +20,16 @@ import { NavbarComponent } from '../navbar/navbar.component';
       height: 100vh;
       display: flex;
       flex-direction: column;
+      background-color: #f5f6fa;
+    }
+    :host-context(.dark-theme) .shell {
+      background-color: #151b28;
     }
     .shell-outlet {
       flex: 1 1 auto;
       min-height: 0;
       overflow: auto;
+      background-color: inherit;
     }
   `]
 })

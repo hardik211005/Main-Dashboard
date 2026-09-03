@@ -26,7 +26,17 @@ input[type="checkbox"] { width:16px; height:16px; accent-color:#1f2f98; cursor:p
 .actions a { border-radius:20px!important; }
 .primary { background:#0c1e93!important; color:#fff!important; border-radius:20px!important; padding:0 22px!important; }
 
-@media(max-width:700px){ .permission-grid{overflow-x:auto;} }
+@media(max-width:700px){
+  .page { padding: 4px 0 0; }
+  .permission-grid { overflow-x: auto; }
+  .grid-row, .grid-row.header { min-width: 480px; }
+  .toolbar, .permission-head { flex-wrap: wrap; gap: 10px; }
+}
+
+@media (max-width: 480px) {
+  .actions { flex-wrap: wrap; }
+  .actions a, .primary { width: 100%; text-align: center; }
+}
 
 :host-context(.dark-theme) .page h2, :host-context(.dark-theme) .permission-head h3 { color:#f1f4fb; }
 :host-context(.dark-theme) .field { color:#c3cbda; }

@@ -1,6 +1,15 @@
-.access-page { min-height:100%; background:#f5f6fa; color:#182033; margin-top: 20px; overflow:visible; }
+.access-page { min-height:100%; background:#f5f6fa; color:#182033; padding-top: 20px; overflow:visible; box-sizing:border-box; }
 .access-content { padding:10px 28px 14px; max-width:1500px; margin:0 auto; box-sizing:border-box; }
-.page-heading { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.page-heading { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px; }
 .page-heading h1 { margin:0 0 4px; font-size:22px; font-weight:800; }
 .page-heading p { margin:0; color:#737b8a; font-size:13px; }
-:host-context(.dark-theme) .access-page { background:#151b28; color:#f4f7fb; }
+:host-context(.dark-theme) .access-page { background:#151b28 !important; color:#f4f7fb; }
+
+@media (max-width: 700px) {
+  .access-content { padding: 8px 14px 12px; }
+  .page-heading h1 { font-size: 19px; }
+}
+
+@media (max-width: 430px) {
+  .access-content { padding: 8px 10px 10px; }
+}

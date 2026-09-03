@@ -96,6 +96,10 @@
 
 @media (max-width: 640px) {
   .form-grid { grid-template-columns: 1fr; }
+  .card { padding: 18px 16px 22px; margin-top: 16px; }
+  .actions { flex-wrap: wrap; }
+  .actions a, .cta-wrap, .primary { width: 100%; }
+  .cta-wrap { display: flex; }
 }
 
 :host-context(.dark-theme) .card { background: #202a3b; border-color: #303b50; }

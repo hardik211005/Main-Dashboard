@@ -28,3 +28,15 @@ td.desc { color:#0d2081; }
 :host-context(.dark-theme) tbody tr:hover { background:#232f45; }
 :host-context(.dark-theme) td.desc { color:#8ea0f7; }
 :host-context(.dark-theme) .search-box { background:#242f47; border-color:#333f5c; } :host-context(.dark-theme) .search-box input { color:#e7ebf7; }
+
+@media (max-width: 700px) {
+  .toolbar { padding: 14px 16px; }
+  .search-box { min-width: 0; flex: 1 1 auto; }
+  .toolbar-actions { width: 100%; }
+  th, td { padding: 12px 14px; }
+}
+
+@media (max-width: 480px) {
+  .toolbar-actions { flex-wrap: wrap; }
+  .search-box { width: 100%; }
+}

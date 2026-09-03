@@ -30,6 +30,36 @@
     <button mat-menu-item routerLink="/access-control/users"><mat-icon>group</mat-icon><span>Users</span></button>
   </mat-menu>
 
+  <button type="button" class="hamburger-btn" [matMenuTriggerFor]="mobileMenu" aria-label="Open navigation menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <mat-menu #mobileMenu="matMenu" class="mobile-nav-menu">
+    <button mat-menu-item routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <mat-icon>dashboard</mat-icon><span>Dashboard</span>
+    </button>
+    <button mat-menu-item routerLink="/ucem" routerLinkActive="active">
+      <mat-icon>router</mat-icon><span>UCEM</span>
+    </button>
+    <button mat-menu-item routerLink="/son" routerLinkActive="active">
+      <mat-icon>hub</mat-icon><span>SON</span>
+    </button>
+    <button mat-menu-item routerLink="/ems" routerLinkActive="active">
+      <mat-icon>settings_input_antenna</mat-icon><span>EMS</span>
+    </button>
+    <button mat-menu-item disabled>
+      <mat-icon>help_outline</mat-icon><span>Help</span>
+    </button>
+    <ng-container *ngIf="canAccessUserManagement">
+      <button mat-menu-item routerLink="/access-control/roles">
+        <mat-icon>admin_panel_settings</mat-icon><span>Access Control &middot; Roles</span>
+      </button>
+      <button mat-menu-item routerLink="/access-control/users">
+        <mat-icon>group</mat-icon><span>Access Control &middot; Users</span>
+      </button>
+    </ng-container>
+  </mat-menu>
+
   <span class="spacer"></span>
 
   <button type="button" class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'" [attr.title]="isDarkMode ? 'Light mode' : 'Dark mode'">
