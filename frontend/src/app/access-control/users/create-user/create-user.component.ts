@@ -10,7 +10,6 @@ import { UsersService } from '../../services/users.service';
 import { Role } from '../../models/role.model';
 import { AccessUser } from '../../models/user.model';
 
-// Letters, spaces, apostrophes and hyphens only — blocks numbers/symbols in names.
 const NAME_PATTERN = /^[A-Za-z][A-Za-z\s'-]*$/;
 
 @Component({
@@ -27,7 +26,6 @@ export class CreateUserComponent implements OnInit {
   loading = false;
   showPassword = false;
   showConfirmPassword = false;
-  /** Native date input needs 'yyyy-MM-dd'; used as [min] so today/past dates can't even be picked. */
   minExpiryDate = CreateUserComponent.tomorrowIso();
 
   private static tomorrowIso(): string {
@@ -116,9 +114,6 @@ export class CreateUserComponent implements OnInit {
     });
   }
 
-  /** Hovering the disabled Create/Update button reveals which fields are
-   *  still missing/invalid (red borders + messages) instead of only the
-   *  tooltip, so the user isn't left guessing why the button won't press. */
   revealMissingFields(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();

@@ -19,9 +19,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   currentUser$;
   isDarkMode = false;
 
-  // Resolved once per permissions change instead of calling a method from
-  // the template (template method calls re-run on every change-detection
-  // pass, which adds up on a navbar that's now shared across pages).
   canAccessUserManagement = false;
 
   private destroy$ = new Subject<void>();

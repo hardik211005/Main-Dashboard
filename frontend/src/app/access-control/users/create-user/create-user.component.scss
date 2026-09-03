@@ -12,8 +12,6 @@
 .heading h2 { margin: 0 0 4px; font-size: 19px; font-weight: 800; color: #1c2436; }
 .heading p { margin: 0; color: #7a8394; font-size: 13px; }
 
-/* Fixed 4-column grid so fields fall into clean, evenly-spaced rows
-   (4 + 4 + 3) instead of one congested line with a big empty gap below. */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -44,8 +42,6 @@
   width: 100%;
 }
 
-/* Bold navy placeholder + typed text, matching the reference screenshot
-   instead of the default light-grey browser placeholder. */
 .form-grid input::placeholder { color: #2f3ea0; font-weight: 700; opacity: 1; }
 .form-grid select { color: #2f3ea0; }
 
@@ -57,7 +53,6 @@
 .form-grid input.invalid,
 .form-grid select.invalid { border-color: #d64545; background: #fef5f5; }
 
-/* Password fields with a show/hide eye toggle */
 .password-field { position: relative; display: flex; }
 .password-field input { padding-right: 38px; }
 .toggle-eye {
@@ -81,7 +76,7 @@
 
 .actions { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 26px; }
 .actions a { border-radius: 20px !important; }
-.cta-wrap { display: inline-flex; } /* not disabled itself, so hover still fires even though the button inside is */
+.cta-wrap { display: inline-flex; }
 .primary {
   background: #051ba4 !important;
   color: #fff !important;
@@ -89,9 +84,6 @@
   padding: 0 22px !important;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
-/* Greyed out while the form is incomplete/invalid; turns blue the instant
-   it becomes valid — the color change itself is the "why can't I submit"
-   signal, no separate text needed. */
 .primary:disabled {
   background: #aab0c4 !important;
   color: #f0f2f7 !important;

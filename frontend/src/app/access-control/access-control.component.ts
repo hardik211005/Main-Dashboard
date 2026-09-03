@@ -15,9 +15,6 @@ import { AcTabsComponent } from './shared/ac-tabs.component';
 export class AccessControlComponent {
   private router = inject(Router);
 
-  // Hide the shared "Access Control" heading + Roles/Users tabs on the
-  // dedicated create/edit forms so they render as their own full page,
-  // matching the standalone Create Role / Create User screens in the design.
   isFormPage = toSignal(
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),

@@ -30,10 +30,6 @@ const REQUEST_TIMEOUT_MS = 15000;
   styleUrl: './role-details.component.scss'
 })
 export class RoleDetailsComponent implements OnInit {
-  // Signals: in this app's zoneless setup, plain class fields mutated inside
-  // async callbacks (subscribe/then) do NOT trigger a re-render on their own.
-  // Signals notify Angular's change detector automatically, so the view
-  // always reflects the latest data as soon as it arrives.
   roles = signal<Role[]>([]);
   loading = signal(true);
   loadError = signal<string | null>(null);

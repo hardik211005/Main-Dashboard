@@ -30,8 +30,6 @@ const REQUEST_TIMEOUT_MS = 15000;
   styleUrl: './user-details.component.scss'
 })
 export class UserDetailsComponent implements OnInit {
-  // Signals so the (zoneless) app re-renders as soon as data arrives,
-  // instead of only on the next unrelated click/event.
   users = signal<AccessUser[]>([]);
   loading = signal(true);
   loadError = signal<string | null>(null);

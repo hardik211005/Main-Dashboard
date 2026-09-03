@@ -11,8 +11,6 @@ export const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   {
-    // Shared shell: navbar renders once here and survives navigation
-    // between any of the child pages below (no re-init, no flicker).
     path: '',
     component: MainLayoutComponent,
     canActivate: [authGuard],

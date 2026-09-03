@@ -2,7 +2,6 @@
   <div class="heading"><div><h2>{{ editingId ? 'Edit User' : 'Create User' }}</h2><p>Enter user information and assign a role.</p></div></div>
   <form [formGroup]="form" (ngSubmit)="save()">
     <div class="form-grid">
-      <!-- Row 1 -->
       <label>First Name
         <input formControlName="firstName" placeholder="First name" [class.invalid]="form.get('firstName')?.invalid && form.get('firstName')?.touched">
         <span class="err" *ngIf="form.get('firstName')?.errors?.['required'] && form.get('firstName')?.touched">First name is required.</span>
@@ -18,7 +17,6 @@
       </label>
       <label>Contact Number <input formControlName="contactNumber" placeholder="Mobile number"></label>
 
-      <!-- Row 2 -->
       <label>Email ID
         <input type="email" formControlName="email" placeholder="name@example.com" [class.invalid]="form.get('email')?.invalid && form.get('email')?.touched">
         <span class="err" *ngIf="form.get('email')?.errors?.['required'] && form.get('email')?.touched">Email is required.</span>
@@ -52,7 +50,6 @@
         <span class="err" *ngIf="form.errors?.['mismatch'] && form.get('confirmPassword')?.touched">Passwords do not match.</span>
       </label>
 
-      <!-- Row 3 -->
       <label>Group Name <input formControlName="groupName" placeholder="Group name"></label>
       <label>EC ID <input formControlName="ecId" placeholder="EC ID (optional; auto-generated if blank)"></label>
       <label>Account Expiry Date

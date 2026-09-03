@@ -65,7 +65,6 @@ export class WebSocketService {
     };
 
     this.socket.onerror = () => {
-      // Dashboard data remains available through the normal REST API.
     };
   }
 

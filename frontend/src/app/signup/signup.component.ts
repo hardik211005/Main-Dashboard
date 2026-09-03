@@ -37,9 +37,6 @@ export class SignupComponent implements OnInit, OnDestroy {
   hidePassword = true;
   loading = false;
 
-  // NG0100 fix: in mat-button ka disabled state signal-based hai, isliye
-  // in flags ko templates mein direct set-and-read nahi karte — ye
-  // separately track hoke setTimeout se deferred update hote hain.
   formInvalid = true;
   usernameChecking = false;
 
@@ -118,12 +115,6 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  /**
-   * Kisi bhi flag ko update karna jo template mein disabled/*ngIf bindings
-   * mein use hota hai, isi helper se karo. setTimeout(0) macrotask hai,
-   * isliye current Angular change-detection cycle ke complete hone ke
-   * baad hi value update hoti hai -> NG0100 (ExpressionChangedAfterItHasBeenCheckedError) nahi aata.
-   */
   private deferUpdate(fn: () => void): void {
     setTimeout(() => {
       fn();
@@ -159,11 +150,6 @@ export class SignupComponent implements OnInit, OnDestroy {
     this.startAutoRotate();
   }
 
-  /**
-   * Username already liya gaya hai ya nahi check karta hai (500ms debounce).
-   * Error key 'taken' hai — signup.component.html ismein hi
-   * hasError('taken') check karta hai.
-   */
   private usernameTakenValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       if (!control.value || control.value.length < 3) {
