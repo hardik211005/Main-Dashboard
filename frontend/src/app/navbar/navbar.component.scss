@@ -181,6 +181,7 @@
 
   .brand-text {
     display: flex;
+    flex-direction: column;
   }
 
   .brand-title,
@@ -255,6 +256,18 @@
   .brand-logo { width: 26px; height: 26px; }
   .brand-title, .brand-sub { font-size: 9.5px; }
   .nav-item { padding: 7px 8px; font-size: 12px; }
+}
+
+@media (max-width: 320px) {
+  .navbar { padding: 0 8px; }
+  .brand { gap: 6px; padding-right: 8px; margin-right: 6px; }
+  .brand-logo { width: 24px; height: 24px; }
+  .brand-text { white-space: normal; max-width: 118px; }
+  .brand-title, .brand-sub { font-size: 8.5px; line-height: 1.15; }
+  .hamburger-btn { width: 32px; height: 32px; }
+  .theme-toggle { width: 28px; height: 28px; margin-right: 2px; }
+  .avatar { width: 26px; height: 26px; font-size: 11px; }
+  .chevron { width: 16px; height: 16px; font-size: 16px; }
 }
 
 .nav-item.disabled { cursor: default; opacity: .55; }
