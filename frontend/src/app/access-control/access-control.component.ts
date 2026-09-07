@@ -14,10 +14,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class AccessControlComponent {
   private router = inject(Router);
 
-  // Hide the shared "Access Control" heading on the dedicated create/edit
-  // forms so they render as their own full page, matching the standalone
-  // Create Role / Create User screens in the design. Switching between
-  // Roles and Users now happens from the navbar dropdown, not page tabs.
   isFormPage = toSignal(
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
