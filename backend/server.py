@@ -1,3 +1,7 @@
+import random
+import smtplib
+from email.mime.text import MIMEText
+ 
 import json
 import os
 import re
@@ -6,12 +10,15 @@ import time
 import uuid
 from functools import wraps
 from datetime import datetime, timedelta, timezone
-
+ 
 import bcrypt
 import jwt
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sock import Sock
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(
@@ -27,6 +34,13 @@ JWT_SECRET = os.environ.get("JWT_SECRET", "change-this-secret-key")
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRY_HOURS = 2
 
+SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.gmail.com")
+SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+SMTP_USER = os.environ.get("SMTP_USER")
+SMTP_PASS = os.environ.get("SMTP_PASS")
+MAIL_FROM = os.environ.get("MAIL_FROM", SMTP_USER)
+OTP_EXPIRY_MINUTES = 10
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 USERS_FILE = os.path.join(BASE_DIR, "data", "users.json")
 BLACKLIST_FILE = os.path.join(BASE_DIR, "data", "blacklist.json")
@@ -34,8 +48,32 @@ EMPLOYEES_FILE = os.path.join(BASE_DIR, "data", "employees.json")
 DASHBOARD_FILE = os.path.join(BASE_DIR, "data", "dashboard.json")
 ROLES_FILE = os.path.join(BASE_DIR, "data", "roles.json")
 
+
+
 ws_clients = set()
 ws_lock = threading.Lock()
+
+otp_store = {}
+otp_lock = threading.Lock()
+ 
+ 
+def send_otp_email(to_email, otp):
+    subject = "Your CNOC password reset code"
+    body = (
+        f"Your OTP to reset your CNOC dashboard password is: {otp}\n\n"
+        f"This code expires in {OTP_EXPIRY_MINUTES} minutes. "
+        f"If you didn't request this, you can safely ignore this email."
+    )
+    msg = MIMEText(body)
+    msg["Subject"] = subject
+    msg["From"] = MAIL_FROM
+    msg["To"] = to_email
+ 
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+        server.starttls()
+        server.login(SMTP_USER, SMTP_PASS)
+        server.sendmail(MAIL_FROM, [to_email], msg.as_string())
+ 
 
 
 def read_json(path):
@@ -270,19 +308,114 @@ def login():
     })
 
 
-@app.route("/api/forgot-password", methods=["POST"])
-def forgot_password():
+# --- REPLACE the entire old @app.route("/api/forgot-password", methods=["POST"])
+# --- block (the whole forgot_password() function) with these THREE routes ---
+
+@app.route("/api/forgot-password/send-otp", methods=["POST"])
+def send_otp():
     data = request.get_json(silent=True) or {}
-    email = data.get("email")
+    email = (data.get("email") or "").strip().lower()
+
+    if not email:
+        return jsonify({"message": "Email is required"}), 400
+
+    users = read_json(USERS_FILE)
+    user = next((u for u in users if u["email"].lower() == email), None)
+    if not user:
+        return jsonify({"message": "No account found with this email"}), 404
+
+    otp = f"{random.randint(0, 999999):06d}"
+    expires = datetime.now(timezone.utc) + timedelta(minutes=OTP_EXPIRY_MINUTES)
+
+    with otp_lock:
+        otp_store[email] = {
+            "otp": otp,
+            "expires": expires.isoformat(),
+            "verified": False,
+            "attempts": 0,
+        }
+
+    try:
+        send_otp_email(email, otp)
+    except Exception:
+        return jsonify({"message": "Could not send OTP email. Please try again later."}), 500
+
+    return jsonify({"message": "OTP sent to your email"})
+
+
+@app.route("/api/forgot-password/verify-otp", methods=["POST"])
+def verify_otp():
+    data = request.get_json(silent=True) or {}
+    email = (data.get("email") or "").strip().lower()
+    otp = (data.get("otp") or "").strip()
+
+    if not email or not otp:
+        return jsonify({"message": "Email and OTP are required"}), 400
+
+    with otp_lock:
+        record = otp_store.get(email)
+
+        if not record:
+            return jsonify({"message": "Please request a new OTP"}), 400
+
+        if datetime.now(timezone.utc) > datetime.fromisoformat(record["expires"]):
+            del otp_store[email]
+            return jsonify({"message": "OTP expired. Please request a new one."}), 400
+
+        record["attempts"] += 1
+        if record["attempts"] > 5:
+            del otp_store[email]
+            return jsonify({"message": "Too many attempts. Please request a new OTP."}), 429
+
+        if record["otp"] != otp:
+            return jsonify({"message": "Invalid OTP"}), 400
+
+        record["verified"] = True
+
+    reset_token = jwt.encode(
+        {
+            "email": email,
+            "purpose": "password_reset",
+            "exp": datetime.now(timezone.utc) + timedelta(minutes=OTP_EXPIRY_MINUTES),
+        },
+        JWT_SECRET,
+        algorithm=JWT_ALGORITHM,
+    )
+
+    return jsonify({"message": "OTP verified", "resetToken": reset_token})
+
+
+@app.route("/api/forgot-password/reset", methods=["POST"])
+def reset_password():
+    data = request.get_json(silent=True) or {}
+    reset_token = data.get("resetToken")
     new_password = data.get("newPassword")
 
-    if not email or not new_password:
-        return jsonify({"message": "Email and new password are required"}), 400
+    if not reset_token or not new_password:
+        return jsonify({"message": "Reset token and new password are required"}), 400
     if len(new_password) < 6:
         return jsonify({"message": "Password must be at least 6 characters"}), 400
 
+    try:
+        payload = jwt.decode(reset_token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+    except jwt.ExpiredSignatureError:
+        return jsonify({"message": "Reset session expired. Please start again."}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({"message": "Invalid reset session. Please start again."}), 401
+
+    if payload.get("purpose") != "password_reset":
+        return jsonify({"message": "Invalid reset session. Please start again."}), 401
+
+    email = payload.get("email")
+
+    with otp_lock:
+        record = otp_store.get(email)
+        if not record or not record.get("verified"):
+            return jsonify({"message": "OTP not verified. Please start again."}), 401
+        del otp_store[email]
+
     users = read_json(USERS_FILE)
-    user = next((u for u in users if u["email"] == email), None)
+    user = next((u for u in users if u["email"].lower() == email), None)
     if not user:
         return jsonify({"message": "No account found with this email"}), 404
 

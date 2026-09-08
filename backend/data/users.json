@@ -7,5 +7,15 @@
     "password": "$2b$12$kAw2N9MYBlRxmiqFNoDUx.k65Z0WjzBphHcKTUue7WuSzpxvOv.Di",
     "roleId": "RID001",
     "createdAt": "2026-09-03T00:00:00+00:00"
+  },
+  {
+    "id": "a036efc7-6f5a-4c60-9430-01686da5fe35",
+    "name": "Hardik Dhameeja",
+    "username": "hardikadmin",
+    "email": "hardikdhameeja2105@gmail.com",
+    "password": "$2b$12$zde4Mo.TZ4EKipkTb3I0iO2z/xs22.pylWIRVrdl21TpobVf208wO",
+    "createdAt": "2026-09-08T06:56:54.123606+00:00",
+    "roleId": "RID002",
+    "createdBy": "self-signup"
   }
 ]

@@ -10,6 +10,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AuthService } from '../auth.service';
 
+type Step = 'email' | 'otp' | 'reset';
+
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
@@ -25,9 +27,18 @@ import { AuthService } from '../auth.service';
   styleUrl: './forgot-password.component.scss'
 })
 export class ForgotPasswordComponent implements OnInit, OnDestroy {
-  form: FormGroup;
-  hidePassword = true;
+  step: Step = 'email';
   loading = false;
+  hidePassword = true;
+  resendCooldown = 0;
+
+  private resendTimer: any;
+  private resetToken = '';
+  private verifiedEmail = '';
+
+  emailForm: FormGroup;
+  otpForm: FormGroup;
+  resetForm: FormGroup;
 
   slides = [
     {
@@ -54,14 +65,22 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     private router: Router,
     private snackBar: MatSnackBar
   ) {
-    this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+    this.emailForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]]
+    });
+
+    this.otpForm = this.fb.group({
+      otp: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]]
+    });
+
+    this.resetForm = this.fb.group({
       newPassword: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
-  get email() { return this.form.get('email'); }
-  get newPassword() { return this.form.get('newPassword'); }
+  get email() { return this.emailForm.get('email'); }
+  get otp() { return this.otpForm.get('otp'); }
+  get newPassword() { return this.resetForm.get('newPassword'); }
 
   get greeting(): string {
     const hour = new Date().getHours();
@@ -70,12 +89,19 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     return 'Good evening';
   }
 
+  get stepSubheading(): string {
+    if (this.step === 'email') return `${this.greeting}! Enter your email to receive a verification code`;
+    if (this.step === 'otp') return `We've sent a 6-digit code to ${this.verifiedEmail}`;
+    return 'Choose a new password for your account';
+  }
+
   ngOnInit(): void {
     this.startAutoRotate();
   }
 
   ngOnDestroy(): void {
     clearInterval(this.slideInterval);
+    clearInterval(this.resendTimer);
   }
 
   private startAutoRotate(): void {
@@ -102,16 +128,86 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     this.startAutoRotate();
   }
 
-  onSubmit(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+  private startResendCooldown(): void {
+    this.resendCooldown = 30;
+    clearInterval(this.resendTimer);
+    this.resendTimer = setInterval(() => {
+      this.resendCooldown--;
+      if (this.resendCooldown <= 0) clearInterval(this.resendTimer);
+    }, 1000);
+  }
+
+  sendOtp(): void {
+    if (this.emailForm.invalid) {
+      this.emailForm.markAllAsTouched();
       return;
     }
 
     this.loading = true;
-    const { email, newPassword } = this.form.value;
+    const { email } = this.emailForm.value;
 
-    this.authService.resetPassword(email, newPassword).subscribe({
+    this.authService.sendForgotPasswordOtp(email).subscribe({
+      next: () => {
+        this.loading = false;
+        this.verifiedEmail = email;
+        this.step = 'otp';
+        this.otpForm.reset();
+        this.startResendCooldown();
+        this.snackBar.open('OTP sent to your email', 'Close', { duration: 3000 });
+      },
+      error: (err) => {
+        this.loading = false;
+        const msg = err?.error?.message || 'Could not send OTP. Please try again.';
+        this.snackBar.open(msg, 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  resendOtp(): void {
+    if (this.resendCooldown > 0 || this.loading) return;
+    this.sendOtp();
+  }
+
+  verifyOtp(): void {
+    if (this.otpForm.invalid) {
+      this.otpForm.markAllAsTouched();
+      return;
+    }
+
+    this.loading = true;
+    const { otp } = this.otpForm.value;
+
+    this.authService.verifyForgotPasswordOtp(this.verifiedEmail, otp).subscribe({
+      next: (res) => {
+        this.loading = false;
+        this.resetToken = res.resetToken;
+        this.step = 'reset';
+        this.resetForm.reset();
+      },
+      error: (err) => {
+        this.loading = false;
+        const msg = err?.error?.message || 'Invalid OTP. Please try again.';
+        this.snackBar.open(msg, 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  changeEmail(): void {
+    clearInterval(this.resendTimer);
+    this.resendCooldown = 0;
+    this.step = 'email';
+  }
+
+  onSubmit(): void {
+    if (this.resetForm.invalid) {
+      this.resetForm.markAllAsTouched();
+      return;
+    }
+
+    this.loading = true;
+    const { newPassword } = this.resetForm.value;
+
+    this.authService.resetPasswordWithToken(this.resetToken, newPassword).subscribe({
       next: () => {
         this.loading = false;
         this.snackBar.open('Password reset! Please log in.', 'Close', { duration: 3000 });
