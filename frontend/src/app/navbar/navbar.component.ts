@@ -19,7 +19,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
   currentUser$;
   isDarkMode = false;
 
- 
+  // Resolved once per permissions change instead of calling a method from
+  // the template (template method calls re-run on every change-detection
+  // pass, which adds up on a navbar that's now shared across pages).
+  canAccessDashboard = false;
+  canAccessUcem = false;
+  canAccessSon = false;
+  canAccessEms = false;
+  canAccessHelp = false;
   canAccessUserManagement = false;
   isAccessControlActive = false;
 
@@ -41,10 +48,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.permissionService.permissions$
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
+        this.canAccessDashboard = this.permissionService.can('Dashboard', 'read');
+        this.canAccessUcem = this.permissionService.can('UCEM', 'read');
+        this.canAccessSon = this.permissionService.can('SON', 'read');
+        this.canAccessEms = this.permissionService.can('EMS', 'read');
+        this.canAccessHelp = this.permissionService.can('Help', 'read');
         this.canAccessUserManagement = this.permissionService.can('UserManagement', 'read');
       });
 
-    
+    // The Access Control nav item is now a dropdown button (Roles/Users),
+    // not a routerLink, so routerLinkActive can't highlight it for us —
+    // track the active state ourselves from the current URL instead.
     this.isAccessControlActive = this.router.url.startsWith('/access-control');
     this.router.events
       .pipe(

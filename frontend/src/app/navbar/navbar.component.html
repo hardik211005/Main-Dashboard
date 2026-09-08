@@ -8,11 +8,11 @@
   </div>
 
   <nav class="nav-links">
-    <a class="nav-item" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
-    <a class="nav-item" routerLink="/ucem" routerLinkActive="active">UCEM</a>
-    <a class="nav-item" routerLink="/son" routerLinkActive="active">SON</a>
-    <a class="nav-item" routerLink="/ems" routerLinkActive="active">EMS</a>
-    <span class="nav-item disabled" title="Coming soon">Help</span>
+    <a *ngIf="canAccessDashboard" class="nav-item" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+    <a *ngIf="canAccessUcem" class="nav-item" routerLink="/ucem" routerLinkActive="active">UCEM</a>
+    <a *ngIf="canAccessSon" class="nav-item" routerLink="/son" routerLinkActive="active">SON</a>
+    <a *ngIf="canAccessEms" class="nav-item" routerLink="/ems" routerLinkActive="active">EMS</a>
+    <span *ngIf="canAccessHelp" class="nav-item disabled" title="Coming soon">Help</span>
     <button
       type="button"
       class="nav-item nav-dropdown"
@@ -35,19 +35,19 @@
   </button>
 
   <mat-menu #mobileMenu="matMenu" class="mobile-nav-menu">
-    <button mat-menu-item routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <button *ngIf="canAccessDashboard" mat-menu-item routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       <mat-icon>dashboard</mat-icon><span>Dashboard</span>
     </button>
-    <button mat-menu-item routerLink="/ucem" routerLinkActive="active">
+    <button *ngIf="canAccessUcem" mat-menu-item routerLink="/ucem" routerLinkActive="active">
       <mat-icon>router</mat-icon><span>UCEM</span>
     </button>
-    <button mat-menu-item routerLink="/son" routerLinkActive="active">
+    <button *ngIf="canAccessSon" mat-menu-item routerLink="/son" routerLinkActive="active">
       <mat-icon>hub</mat-icon><span>SON</span>
     </button>
-    <button mat-menu-item routerLink="/ems" routerLinkActive="active">
+    <button *ngIf="canAccessEms" mat-menu-item routerLink="/ems" routerLinkActive="active">
       <mat-icon>settings_input_antenna</mat-icon><span>EMS</span>
     </button>
-    <button mat-menu-item disabled>
+    <button *ngIf="canAccessHelp" mat-menu-item disabled>
       <mat-icon>help_outline</mat-icon><span>Help</span>
     </button>
     <ng-container *ngIf="canAccessUserManagement">

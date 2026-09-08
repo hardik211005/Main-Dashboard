@@ -4,6 +4,7 @@ import { SignupComponent } from './signup/signup.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { MainLayoutComponent } from './layout/main-layout.component';
 import { authGuard } from './auth.guard';
+import { modulePermissionGuard } from './access-control/guards/module-permission.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -17,7 +18,8 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent)
+        loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent),
+        canActivate: [modulePermissionGuard('Dashboard', 'read')]
       },
       {
         path: 'access-control',
