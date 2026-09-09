@@ -17,5 +17,15 @@
     "createdAt": "2026-09-08T06:56:54.123606+00:00",
     "roleId": "RID002",
     "createdBy": "self-signup"
+  },
+  {
+    "id": "b8460d75-15cc-4afe-a7ee-45eac9f8e159",
+    "name": "Aryan",
+    "username": "aryan1911",
+    "email": "aryanluthra1911@gmail.com",
+    "password": "$2b$12$zTuLCgtEyHbZ63v.MlZmceToCc.Oynne9hCpwN89YyOst9X8VipMm",
+    "createdAt": "2026-09-09T06:32:42.388635+00:00",
+    "roleId": "RID002",
+    "createdBy": "self-signup"
   }
 ]

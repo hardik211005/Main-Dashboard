@@ -1,6 +1,5 @@
 import random
-import smtplib
-from email.mime.text import MIMEText
+import requests
  
 import json
 import os
@@ -34,12 +33,9 @@ JWT_SECRET = os.environ.get("JWT_SECRET", "change-this-secret-key")
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRY_HOURS = 2
 
-SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.gmail.com")
-SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
-SMTP_USER = os.environ.get("SMTP_USER")
-SMTP_PASS = os.environ.get("SMTP_PASS")
-MAIL_FROM = os.environ.get("MAIL_FROM", SMTP_USER)
-OTP_EXPIRY_MINUTES = 10
+BREVO_API_KEY = os.environ.get("BREVO_API_KEY")
+MAIL_FROM = os.environ.get("MAIL_FROM")
+OTP_EXPIRY_MINUTES = 5
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 USERS_FILE = os.path.join(BASE_DIR, "data", "users.json")
@@ -47,12 +43,10 @@ BLACKLIST_FILE = os.path.join(BASE_DIR, "data", "blacklist.json")
 EMPLOYEES_FILE = os.path.join(BASE_DIR, "data", "employees.json")
 DASHBOARD_FILE = os.path.join(BASE_DIR, "data", "dashboard.json")
 ROLES_FILE = os.path.join(BASE_DIR, "data", "roles.json")
-
-
-
+ 
 ws_clients = set()
 ws_lock = threading.Lock()
-
+ 
 otp_store = {}
 otp_lock = threading.Lock()
  
@@ -64,15 +58,23 @@ def send_otp_email(to_email, otp):
         f"This code expires in {OTP_EXPIRY_MINUTES} minutes. "
         f"If you didn't request this, you can safely ignore this email."
     )
-    msg = MIMEText(body)
-    msg["Subject"] = subject
-    msg["From"] = MAIL_FROM
-    msg["To"] = to_email
  
-    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
-        server.starttls()
-        server.login(SMTP_USER, SMTP_PASS)
-        server.sendmail(MAIL_FROM, [to_email], msg.as_string())
+    response = requests.post(
+        "https://api.brevo.com/v3/smtp/email",
+        headers={
+            "api-key": BREVO_API_KEY,
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        },
+        json={
+            "sender": {"email": MAIL_FROM, "name": "CNOC Dashboard"},
+            "to": [{"email": to_email}],
+            "subject": subject,
+            "textContent": body,
+        },
+        timeout=10,
+    )
+    response.raise_for_status()
  
 
 

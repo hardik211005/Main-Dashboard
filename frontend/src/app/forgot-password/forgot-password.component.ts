@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -27,14 +27,18 @@ type Step = 'email' | 'otp' | 'reset';
   styleUrl: './forgot-password.component.scss'
 })
 export class ForgotPasswordComponent implements OnInit, OnDestroy {
-  step: Step = 'email';
-  loading = false;
-  hidePassword = true;
-  resendCooldown = 0;
+  // All state that changes async (HTTP callbacks, setInterval/setTimeout)
+  // MUST be a signal in a zoneless app, otherwise the view never repaints.
+  step = signal<Step>('email');
+  loading = signal(false);
+  hidePassword = signal(true);
+  resendCooldown = signal(0);
+  currentSlide = signal(0);
+  slideVisible = signal(true);
+  verifiedEmail = signal('');
 
   private resendTimer: any;
   private resetToken = '';
-  private verifiedEmail = '';
 
   emailForm: FormGroup;
   otpForm: FormGroup;
@@ -55,9 +59,16 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       description: 'Secure access, fast insights, zero guesswork.'
     }
   ];
-  currentSlide = 0;
-  slideVisible = true;
   private slideInterval: any;
+
+  currentSlideData = computed(() => this.slides[this.currentSlide()]);
+
+  stepSubheading = computed(() => {
+    const step = this.step();
+    if (step === 'email') return `${this.greeting}! Enter your email to receive a verification code`;
+    if (step === 'otp') return `We've sent a 6-digit code to ${this.verifiedEmail()}`;
+    return 'Choose a new password for your account';
+  });
 
   constructor(
     private fb: FormBuilder,
@@ -89,12 +100,6 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     return 'Good evening';
   }
 
-  get stepSubheading(): string {
-    if (this.step === 'email') return `${this.greeting}! Enter your email to receive a verification code`;
-    if (this.step === 'otp') return `We've sent a 6-digit code to ${this.verifiedEmail}`;
-    return 'Choose a new password for your account';
-  }
-
   ngOnInit(): void {
     this.startAutoRotate();
   }
@@ -106,34 +111,34 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
   private startAutoRotate(): void {
     this.slideInterval = setInterval(() => {
-      this.slideVisible = false;
+      this.slideVisible.set(false);
       setTimeout(() => {
-        this.currentSlide = (this.currentSlide + 1) % this.slides.length;
-        this.slideVisible = true;
+        this.currentSlide.set((this.currentSlide() + 1) % this.slides.length);
+        this.slideVisible.set(true);
       }, 300);
     }, 3500);
   }
 
   goToSlide(index: number): void {
-    if (index === this.currentSlide) return;
+    if (index === this.currentSlide()) return;
 
     clearInterval(this.slideInterval);
 
-    this.slideVisible = false;
+    this.slideVisible.set(false);
     setTimeout(() => {
-      this.currentSlide = index;
-      this.slideVisible = true;
+      this.currentSlide.set(index);
+      this.slideVisible.set(true);
     }, 300);
 
     this.startAutoRotate();
   }
 
   private startResendCooldown(): void {
-    this.resendCooldown = 30;
+    this.resendCooldown.set(30);
     clearInterval(this.resendTimer);
     this.resendTimer = setInterval(() => {
-      this.resendCooldown--;
-      if (this.resendCooldown <= 0) clearInterval(this.resendTimer);
+      this.resendCooldown.update((v) => v - 1);
+      if (this.resendCooldown() <= 0) clearInterval(this.resendTimer);
     }, 1000);
   }
 
@@ -143,20 +148,20 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.loading = true;
+    this.loading.set(true);
     const { email } = this.emailForm.value;
 
     this.authService.sendForgotPasswordOtp(email).subscribe({
       next: () => {
-        this.loading = false;
-        this.verifiedEmail = email;
-        this.step = 'otp';
+        this.loading.set(false);
+        this.verifiedEmail.set(email);
+        this.step.set('otp');
         this.otpForm.reset();
         this.startResendCooldown();
         this.snackBar.open('OTP sent to your email', 'Close', { duration: 3000 });
       },
       error: (err) => {
-        this.loading = false;
+        this.loading.set(false);
         const msg = err?.error?.message || 'Could not send OTP. Please try again.';
         this.snackBar.open(msg, 'Close', { duration: 3000 });
       }
@@ -164,7 +169,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   }
 
   resendOtp(): void {
-    if (this.resendCooldown > 0 || this.loading) return;
+    if (this.resendCooldown() > 0 || this.loading()) return;
     this.sendOtp();
   }
 
@@ -174,18 +179,18 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.loading = true;
+    this.loading.set(true);
     const { otp } = this.otpForm.value;
 
-    this.authService.verifyForgotPasswordOtp(this.verifiedEmail, otp).subscribe({
+    this.authService.verifyForgotPasswordOtp(this.verifiedEmail(), otp).subscribe({
       next: (res) => {
-        this.loading = false;
+        this.loading.set(false);
         this.resetToken = res.resetToken;
-        this.step = 'reset';
+        this.step.set('reset');
         this.resetForm.reset();
       },
       error: (err) => {
-        this.loading = false;
+        this.loading.set(false);
         const msg = err?.error?.message || 'Invalid OTP. Please try again.';
         this.snackBar.open(msg, 'Close', { duration: 3000 });
       }
@@ -194,8 +199,12 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
   changeEmail(): void {
     clearInterval(this.resendTimer);
-    this.resendCooldown = 0;
-    this.step = 'email';
+    this.resendCooldown.set(0);
+    this.step.set('email');
+  }
+
+  togglePasswordVisibility(): void {
+    this.hidePassword.update((v) => !v);
   }
 
   onSubmit(): void {
@@ -204,17 +213,17 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.loading = true;
+    this.loading.set(true);
     const { newPassword } = this.resetForm.value;
 
     this.authService.resetPasswordWithToken(this.resetToken, newPassword).subscribe({
       next: () => {
-        this.loading = false;
+        this.loading.set(false);
         this.snackBar.open('Password reset! Please log in.', 'Close', { duration: 3000 });
         this.router.navigate(['/login']);
       },
       error: (err) => {
-        this.loading = false;
+        this.loading.set(false);
         const msg = err?.error?.message || 'Could not reset password. Please try again.';
         this.snackBar.open(msg, 'Close', { duration: 3000 });
       }
