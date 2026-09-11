@@ -30,7 +30,11 @@
           <div class="ne-list">
             @for (nodeItem of group.nes; track nodeItem.id) {
               <div class="ne-row" [class.selected]="ucem.selectedNeId() === nodeItem.id" (click)="ucem.selectNe(nodeItem.id)">
-                <input type="checkbox" (click)="$event.stopPropagation()" />
+                <input
+                  type="checkbox"
+                  [checked]="ucem.selectedNeId() === nodeItem.id"
+                  (click)="$event.stopPropagation(); ucem.selectNe(nodeItem.id)"
+                />
                 <span class="ne-name" (click)="ucem.openNodeInfo(nodeItem.id, $event)">{{ nodeItem.label }}</span>
                 <span [ngClass]="statusClass(nodeItem.status)"></span>
                 <button type="button" class="icon-btn small" (click)="ucem.toggleFavourite(nodeItem.id, $event)" [title]="ucem.favourites().has(nodeItem.id) ? 'Remove favourite' : 'Add favourite'">

@@ -304,6 +304,9 @@ export class UcemService {
       now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
 
     const id = `r${Date.now()}`;
+    const anrState = this.paramValues()['ANR_State'];
+    const staysRunning = anrState === 'Inactive';
+
     const newRow: ExecutionRow = {
       id,
       neName: ne.label,
@@ -315,6 +318,10 @@ export class UcemService {
     };
 
     this.rows.update(list => [newRow, ...list]);
+
+    // While ANR_State is Inactive, the command stays "Running" indefinitely.
+    // It only resolves to Completed/Failed once ANR_State is Active.
+    if (staysRunning) return;
 
     setTimeout(() => {
       const success = Math.random() > 0.2;
