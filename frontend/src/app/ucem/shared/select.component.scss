@@ -1,0 +1,87 @@
+.app-select {
+  position: relative;
+  width: 100%;
+}
+
+.select-trigger {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid #dfe4ec;
+  background: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  color: inherit;
+  text-align: left;
+
+  &.open { border-color: #3d5be0; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.select-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.select-value.placeholder { color: #9aa0ab; }
+
+.chevron {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #9aa0ab;
+  flex: 0 0 auto;
+  transition: transform 0.15s ease;
+
+  &.rotated { transform: rotate(180deg); }
+}
+
+.select-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16);
+  border: 1px solid #eef0f5;
+  padding: 6px;
+  z-index: 40;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.select-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 9px 10px;
+  border-radius: 6px;
+  border: none;
+  background: none;
+  font-size: 13px;
+  cursor: pointer;
+  color: inherit;
+
+  &:hover { background: #f5f6fa; }
+  &.selected { color: #3d5be0; font-weight: 600; background: #eef1fb; }
+}
+
+.select-empty {
+  padding: 9px 10px;
+  font-size: 12px;
+  color: #9aa0ab;
+}
+
+:host-context(.dark-theme) {
+  .select-trigger { background: #202a3b; border-color: #303b50; color: #f4f7fb; }
+  .select-panel { background: #1a2334; border-color: #2a3448; }
+  .select-option:hover { background: #202a3b; }
+  .select-option.selected { background: #26314a; }
+}

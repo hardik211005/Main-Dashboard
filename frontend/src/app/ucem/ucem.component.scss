@@ -1,0 +1,121 @@
+.ucem-page {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.ucem-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.tab {
+  padding: 8px 22px;
+  border-radius: 8px 8px 0 0;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: #9aa0ab;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+
+  &.active {
+    color: #3d5be0;
+    border-bottom: 2px solid #3d5be0;
+  }
+}
+
+.mobile-switcher {
+  display: none;
+  gap: 8px;
+  margin-bottom: 10px;
+
+  button {
+    flex: 1 1 0;
+    padding: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #dfe4ec;
+    background: #fff;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #667085;
+    cursor: pointer;
+
+    &.active { background: #3d5be0; color: #fff; border-color: #3d5be0; }
+  }
+}
+
+.ucem-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 300px 340px 1fr;
+  grid-template-rows: minmax(0, 1fr);
+  gap: 16px;
+}
+
+.panel {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+  min-height: 0;
+  overflow: hidden;
+}
+
+.batch-panel {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px 20px;
+  flex: 1 1 auto;
+  overflow: auto;
+}
+
+.panel-title { font-size: 16px; font-weight: 700; margin: 0 0 14px; }
+
+.batch-empty { color: #9aa0ab; font-size: 13px; }
+
+.batch-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+
+  th {
+    text-align: left;
+    padding: 10px 12px;
+    background: #f5f6fa;
+    color: #667085;
+    font-weight: 700;
+  }
+  td { padding: 10px 12px; border-top: 1px solid #f0f1f6; }
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #e0433d;
+  display: flex;
+}
+
+:host-context(.dark-theme) {
+  .panel, .batch-panel { background: #1a2334; box-shadow: none; }
+  .batch-table th { background: #202a3b; color: #aeb8cc; }
+  .batch-table td { border-color: #2a3448; }
+  .mobile-switcher button { background: #202a3b; border-color: #303b50; color: #aeb8cc; }
+}
+
+@media (max-width: 1100px) {
+  .mobile-switcher { display: flex; }
+
+  .ucem-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel.mobile-hidden { display: none; }
+}

@@ -1,0 +1,114 @@
+<div class="response-panel" [class.fullscreen]="ucem.isResponseFullscreen()">
+  <div class="panel-header">
+    <h2 class="panel-title">Response</h2>
+    @if (ucem.selectedNe()) {
+      <div class="header-actions">
+        <button type="button" class="icon-btn" title="Refresh" (click)="ucem.refreshResponses()">
+          <mat-icon [class.spin]="ucem.refreshing()">refresh</mat-icon>
+        </button>
+        <button type="button" class="icon-btn" title="Download CSV" (click)="ucem.downloadResponses()">
+          <mat-icon>download</mat-icon>
+        </button>
+        <button type="button" class="icon-btn" [title]="ucem.isResponseFullscreen() ? 'Exit fullscreen' : 'Expand'" (click)="ucem.toggleResponseFullscreen()">
+          <mat-icon>{{ ucem.isResponseFullscreen() ? 'close_fullscreen' : 'open_in_full' }}</mat-icon>
+        </button>
+        <div class="menu-wrap">
+          <button type="button" class="icon-btn" title="More" (click)="ucem.toggleResponseMenu($event)">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          @if (ucem.responseMenuOpen()) {
+            <div class="dropdown-menu" (click)="$event.stopPropagation()">
+              <button type="button" (click)="ucem.clearResponses()">Clear all</button>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (!ucem.selectedNe()) {
+    <div class="empty-state">
+      <svg width="160" height="140" viewBox="0 0 160 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="80" cy="66" r="58" fill="#eef1fb"/>
+        <rect x="42" y="40" width="76" height="50" rx="4" fill="#3d5be0"/>
+        <rect x="48" y="46" width="64" height="32" rx="2" fill="#ffffff"/>
+        <rect x="53" y="52" width="38" height="8" rx="4" fill="#dfe4ec"/>
+        <circle cx="98" cy="56" r="4" fill="#3d5be0"/>
+        <rect x="70" y="90" width="20" height="8" fill="#c7cee6"/>
+        <rect x="56" y="98" width="48" height="6" rx="3" fill="#c7cee6"/>
+        <circle cx="80" cy="30" r="12" fill="#f2b26b"/>
+        <rect x="66" y="42" width="28" height="30" rx="8" fill="#3d5be0"/>
+        <rect x="60" y="55" width="14" height="26" rx="6" fill="#3d5be0"/>
+        <rect x="86" y="55" width="14" height="26" rx="6" fill="#f2b26b"/>
+      </svg>
+      <div class="empty-title">Choose your SAP ID to begin!</div>
+      <div class="empty-sub">Select your SAP ID from the left panel and enter the command to see the results.</div>
+    </div>
+  } @else {
+    <div class="table-scroll">
+      <table class="response-table">
+        <thead>
+          <tr>
+            <th>NE Name</th>
+            <th>NE ID</th>
+            <th>Command Name</th>
+            <th>Request Time</th>
+            <th>Respond Time</th>
+            <th>Result</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of ucem.rows(); track row.id) {
+            <tr class="data-row" (click)="ucem.toggleRowExpand(row.id)">
+              <td class="link-cell">{{ row.neName }}</td>
+              <td>{{ row.neId }}</td>
+              <td>{{ row.commandName }}</td>
+              <td>{{ row.requestTime }}</td>
+              <td>{{ row.respondTime }}</td>
+              <td>
+                <span [ngClass]="resultClass(row.result)">
+                  @if (row.result === 'Running') {
+                    <mat-icon class="spin">autorenew</mat-icon>
+                  } @else {
+                    <span class="dot"></span>
+                  }
+                  {{ row.result }}
+                </span>
+              </td>
+              <td><button type="button" class="icon-btn" (click)="$event.stopPropagation()"><mat-icon>more_vert</mat-icon></button></td>
+            </tr>
+            @if (ucem.expandedRowId() === row.id && row.rawResponse) {
+              <tr class="raw-row">
+                <td colspan="7">
+                  <div class="raw-block">
+                    <button type="button" class="close-raw" (click)="ucem.toggleRowExpand(row.id)"><mat-icon>close</mat-icon></button>
+                    <pre>{{ row.rawResponse }}</pre>
+                  </div>
+                </td>
+              </tr>
+            }
+          }
+          @if (ucem.rows().length === 0) {
+            <tr><td colspan="7" class="no-rows">No responses yet.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      <button type="button" class="icon-btn" [disabled]="ucem.page() <= 1" (click)="ucem.page.set(ucem.page() - 1)">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <span>{{ ucem.page() | number:'2.0-0' }} of {{ ucem.totalPages() }}</span>
+      <button type="button" class="icon-btn" [disabled]="ucem.page() >= ucem.totalPages()" (click)="ucem.page.set(ucem.page() + 1)">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+      <select class="page-size" [ngModel]="ucem.pageSize()" (ngModelChange)="ucem.pageSize.set($event)">
+        <option [ngValue]="7">07 Row</option>
+        <option [ngValue]="10">10 Row</option>
+        <option [ngValue]="25">25 Row</option>
+      </select>
+    </div>
+  }
+</div>

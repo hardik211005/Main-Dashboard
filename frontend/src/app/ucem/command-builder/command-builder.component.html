@@ -1,0 +1,81 @@
+<div class="command-builder">
+  <div class="cb-sticky-top">
+    <h2 class="panel-title">Command Builder</h2>
+
+    @if (ucem.selectedNe(); as node) {
+      <div class="node-header">
+        <span class="dot" [ngClass]="'dot-' + node.status"></span>
+        <div>
+          <div class="node-id">{{ node.id }}</div>
+          <div class="node-sub">Node 1</div>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (ucem.selectedNe()) {
+    <div class="cb-scroll">
+      <label class="field-label">Category</label>
+      <app-select
+        [value]="ucem.category()"
+        [options]="ucem.categories"
+        placeholder="Select Category"
+        (valueChange)="onCategoryChange($event)"
+      ></app-select>
+
+      <label class="field-label required">Command</label>
+      <app-select
+        [value]="ucem.commandId()"
+        [options]="commandOptions()"
+        placeholder="Select Command"
+        [disabled]="!ucem.category()"
+        (valueChange)="onCommandChange($event)"
+      ></app-select>
+
+      @if (ucem.selectedCommand(); as cmd) {
+        <div class="params-header">
+          <span class="field-label">Parameters</span>
+          <div class="params-actions">
+            <button type="button" class="icon-btn" title="Erase" (click)="ucem.eraseParams()">
+              <mat-icon>backspace</mat-icon>
+            </button>
+            <button type="button" class="icon-btn" title="Recent" (click)="ucem.loadRecent()">
+              <mat-icon>history</mat-icon>
+            </button>
+            <button type="button" class="link-btn" (click)="ucem.resetToDefault()">Default</button>
+          </div>
+        </div>
+
+        <div class="params-form">
+          @for (param of cmd.parameters; track param.key) {
+            <div class="param-row">
+              <label class="field-label">{{ param.label }}</label>
+              @if (param.type === 'number') {
+                <input
+                  type="number"
+                  class="field-input"
+                  [ngModel]="ucem.paramValues()[param.key]"
+                  (ngModelChange)="onNumberChange(param.key, $event)"
+                />
+              } @else {
+                <app-select
+                  [value]="ucem.paramValues()[param.key] ?? null"
+                  [options]="param.options || []"
+                  placeholder="Select"
+                  (valueChange)="ucem.updateParam(param.key, $event)"
+                ></app-select>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="cb-sticky-bottom">
+      <button type="button" class="btn btn-secondary" [disabled]="!ucem.selectedCommand()" (click)="ucem.addToBatch()">Add to Batch</button>
+      <button type="button" class="btn btn-primary" [disabled]="!ucem.selectedCommand()" (click)="ucem.execute()">Execute</button>
+    </div>
+  } @else {
+    <div class="no-node">Select an NE from the list to build a command.</div>
+  }
+</div>

@@ -24,6 +24,10 @@ export const routes: Routes = [
       {
         path: 'access-control',
         loadChildren: () => import('./access-control/access-control.routes').then(m => m.accessControlRoutes)
+      },
+      {
+        path: 'ucem',
+        loadChildren: () => import('./ucem/ucem.routes').then(m => m.ucemRoutes)
       }
     ]
   },

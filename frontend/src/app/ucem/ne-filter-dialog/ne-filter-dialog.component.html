@@ -1,0 +1,48 @@
+@if (ucem.filterDialogOpen()) {
+  <div class="overlay-backdrop" (click)="ucem.closeFilterDialog()">
+    <div class="filter-card" (click)="$event.stopPropagation()">
+      <div class="filter-header">
+        <span>Filter</span>
+        <button type="button" class="icon-btn" (click)="ucem.closeFilterDialog()"><mat-icon>close</mat-icon></button>
+      </div>
+
+      <div class="filter-body">
+        <div class="filter-tabs">
+          @for (tab of tabs; track tab) {
+            <button type="button" class="tab-item" [class.active]="activeTab() === tab" (click)="activeTab.set(tab)">
+              {{ tab }}
+            </button>
+          }
+        </div>
+
+        <div class="filter-content">
+          @if (activeTab() === 'Parent EMS') {
+            <label class="check-row">
+              <input type="checkbox" [checked]="allSelected" (change)="ucem.toggleAllParentEms($any($event.target).checked)" />
+              Select All
+            </label>
+            @for (name of emsOptions; track name) {
+              <label class="check-row">
+                <input type="checkbox" [checked]="ucem.selectedParentEms().has(name)" (change)="ucem.toggleParentEms(name)" />
+                {{ name }}
+              </label>
+            }
+          } @else {
+            <div class="tab-placeholder">No filters configured for {{ activeTab() }} yet.</div>
+          }
+        </div>
+      </div>
+
+      <div class="filter-footer">
+        <label class="check-row">
+          <input type="checkbox" [checked]="setAsDefault()" (change)="setAsDefault.set($any($event.target).checked)" />
+          Set as Default
+        </label>
+        <div class="footer-actions">
+          <button type="button" class="btn btn-secondary" (click)="ucem.closeFilterDialog()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="apply()">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,29 @@
+@if (ucem.nodeInfoNe(); as node) {
+  <div class="overlay-backdrop" (click)="ucem.closeNodeInfo()">
+    <div class="info-card" (click)="$event.stopPropagation()">
+      <div class="info-card-header">
+        <span class="info-title">{{ node.id }}</span>
+        <div class="header-actions">
+          <button type="button" class="icon-btn" (click)="ucem.toggleFavourite(node.id)" title="Add to Favourite">
+            <mat-icon>{{ ucem.favourites().has(node.id) ? 'star' : 'star_border' }}</mat-icon>
+            <span class="fav-label">Add to Favourite</span>
+          </button>
+          <button type="button" class="icon-btn" (click)="ucem.closeNodeInfo()"><mat-icon>close</mat-icon></button>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-item"><span class="info-label">Node ID</span><span class="info-value">{{ node.details.nodeId }}</span></div>
+        <div class="info-item"><span class="info-label">OAM IP</span><span class="info-value">{{ node.details.oamIp }}</span></div>
+        <div class="info-item"><span class="info-label">Node Type</span><span class="info-value">{{ node.details.nodeType }}</span></div>
+        <div class="info-item"><span class="info-label">HW Type</span><span class="info-value">{{ node.details.hwType }}</span></div>
+        <div class="info-item"><span class="info-label">Parent EMS Name</span><span class="info-value">{{ node.details.parentEmsName }}</span></div>
+        <div class="info-item"><span class="info-label">Parent EMS IP</span><span class="info-value">{{ node.details.parentEmsIp }}</span></div>
+        <div class="info-item"><span class="info-label">Longitude</span><span class="info-value">{{ node.details.longitude }}</span></div>
+        <div class="info-item"><span class="info-label">Latitude</span><span class="info-value">{{ node.details.latitude }}</span></div>
+        <div class="info-item"><span class="info-label">Last Heartbeat</span><span class="info-value">{{ node.details.lastHeartbeat }}</span></div>
+        <div class="info-item"><span class="info-label">PLMN</span><span class="info-value">{{ node.details.plmn }}</span></div>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,219 @@
+.response-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  padding: 16px 18px;
+  box-sizing: border-box;
+
+  &.fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    background: #fff;
+    border-radius: 0;
+    padding: 18px 24px;
+  }
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  flex: 0 0 auto;
+}
+
+.panel-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.header-actions { display: flex; align-items: center; gap: 2px; }
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #6f7785;
+  padding: 6px;
+  border-radius: 6px;
+
+  mat-icon { font-size: 19px; width: 19px; height: 19px; }
+  mat-icon.spin { animation: spin 0.8s linear infinite; }
+  &:hover { background: #eef1f8; }
+  &:disabled { opacity: 0.35; cursor: not-allowed; }
+}
+
+.menu-wrap { position: relative; }
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16);
+  border: 1px solid #eef0f5;
+  padding: 4px;
+  z-index: 50;
+  min-width: 130px;
+
+  button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 8px 10px;
+    font-size: 12.5px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: inherit;
+
+    &:hover { background: #f5f6fa; }
+  }
+}
+
+.empty-state {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 24px;
+}
+
+.empty-title { font-size: 16px; font-weight: 700; margin-top: 8px; }
+.empty-sub { font-size: 13px; color: #9aa0ab; max-width: 320px; }
+
+.table-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  border: 1px solid #eef0f5;
+  border-radius: 10px;
+}
+
+.response-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  min-width: 720px;
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: #f5f6fa;
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 700;
+    color: #667085;
+    white-space: nowrap;
+    z-index: 1;
+  }
+
+  td {
+    padding: 10px 12px;
+    border-top: 1px solid #f0f1f6;
+    white-space: nowrap;
+  }
+
+  .data-row { cursor: pointer; }
+  .data-row:hover { background: #f8f9fd; }
+
+  .link-cell { color: #3d5be0; font-weight: 600; }
+
+  .no-rows {
+    text-align: center;
+    color: #9aa0ab;
+    padding: 24px 12px;
+  }
+}
+
+.result {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+
+  .dot { width: 7px; height: 7px; border-radius: 50%; }
+  mat-icon.spin {
+    font-size: 15px; width: 15px; height: 15px;
+    animation: spin 1.1s linear infinite;
+  }
+}
+
+.result-completed { color: #3f9d72; .dot { background: #3f9d72; } }
+.result-failed { color: #d97b74; .dot { background: #d97b74; } }
+.result-running { color: #6b7fef; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.raw-row td {
+  background: #f9fafc;
+  border-top: none;
+  white-space: normal;
+}
+
+.raw-block {
+  position: relative;
+  padding: 12px 36px 12px 12px;
+
+  pre {
+    margin: 0;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #5b6fd6;
+    white-space: pre-wrap;
+  }
+}
+
+.close-raw {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9aa0ab;
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 10px;
+  font-size: 12.5px;
+  color: #667085;
+  flex: 0 0 auto;
+}
+
+.page-size {
+  border-radius: 6px;
+  border: 1px solid #dfe4ec;
+  padding: 5px 8px;
+  font-size: 12.5px;
+  background: #fff;
+  color: inherit;
+}
+
+:host-context(.dark-theme) {
+  .response-panel.fullscreen { background: #151b28; }
+  .table-scroll { border-color: #2a3448; }
+  thead th { background: #202a3b; color: #aeb8cc; }
+  td { border-color: #2a3448; }
+  .data-row:hover { background: #202a3b; }
+  .raw-row td { background: #1a2334; }
+  .page-size { background: #202a3b; border-color: #303b50; }
+  .dropdown-menu { background: #1a2334; border-color: #2a3448; }
+  .dropdown-menu button:hover { background: #202a3b; }
+}

@@ -1,0 +1,21 @@
+<div class="app-select" [class.disabled]="disabled">
+  <button type="button" class="select-trigger" (click)="toggle()" [class.open]="open()" [disabled]="disabled">
+    <span class="select-value" [class.placeholder]="!hasValue()">
+      {{ hasValue() ? value : placeholder }}
+    </span>
+    <mat-icon class="chevron" [class.rotated]="open()">expand_more</mat-icon>
+  </button>
+
+  @if (open()) {
+    <div class="select-panel">
+      @for (opt of options; track opt) {
+        <button type="button" class="select-option" [class.selected]="opt === value" (click)="choose(opt)">
+          {{ opt }}
+        </button>
+      }
+      @if (options.length === 0) {
+        <div class="select-empty">No options</div>
+      }
+    </div>
+  }
+</div>
