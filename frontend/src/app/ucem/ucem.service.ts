@@ -135,12 +135,77 @@ const MOCK_ROWS: ExecutionRow[] = [
       '-----------------------------------------------------------\n' +
       'Count = 1\n;'
   },
-  { id: 'r2', neName: 'eNB_1278_eFemto', neId: 'eNB_1278', commandName: 'CHG-ANR-SCHED', requestTime: '09/02/2026 ; 12:32', respondTime: '09/02/2026 ; 12:32', result: 'Running' },
-  { id: 'r3', neName: 'eNB_1278_eFemto', neId: 'eNB_1278', commandName: 'CHG-ANR-SCHED', requestTime: '09/02/2026 ; 12:32', respondTime: '09/02/2026 ; 12:32', result: 'Failed' },
-  { id: 'r4', neName: 'eNB_1278_eFemto', neId: 'eNB_1278', commandName: 'CHG-ANR-SCHED', requestTime: '09/02/2026 ; 12:32', respondTime: '09/02/2026 ; 12:32', result: 'Completed' },
-  { id: 'r5', neName: 'eNB_1278_eFemto', neId: 'eNB_1278', commandName: 'CHG-ANR-SCHED', requestTime: '09/02/2026 ; 12:32', respondTime: '09/02/2026 ; 12:32', result: 'Completed' },
-  { id: 'r6', neName: 'eNB_1278_eFemto', neId: 'eNB_1278', commandName: 'CHG-ANR-SCHED', requestTime: '09/02/2026 ; 12:32', respondTime: '09/02/2026 ; 12:32', result: 'Completed' },
-  { id: 'r7', neName: 'eNB_1278_eFemto', neId: 'eNB_1278', commandName: 'CHG-ANR-SCHED', requestTime: '09/02/2026 ; 12:32', respondTime: '09/02/2026 ; 12:32', result: 'Completed' }
+  { id: 'r2', neName: 'eNB_1278_eFemto', neId: 'eNB_1278', commandName: 'CHG-ANR-SCHED', requestTime: '09/02/2026 ; 12:32', respondTime: '09/02/2026 ; 12:32', result: 'Running',
+    rawResponse:
+      '[ eNB_1278_eFemto ] CHG-ANR-SCHED_STATE-"Active",Day="Everyday", Hour="12", Minute="0", Duration="24";\n' +
+      'eNB_1278_eFemto   wed 09/02/2026 ; 12:32\n' +
+      'M2878 CHANGE SON ANR FUNCTION SCHEDULES : EXECUTING\n' +
+      '-----------------------------------------------------------\n' +
+      'ANR_STATE            DAY               Hour   Minute  Duration\n' +
+      '-----------------------------------------------------------\n' +
+      'Active => Active      Everyday          12 => 12  0 => 0   24 => 24\n' +
+      '-----------------------------------------------------------\n' +
+      'Status: command in progress, awaiting NE acknowledgement...\n;'
+  },
+  { id: 'r3', neName: 'eNB_1278_eFemto', neId: 'eNB_1278', commandName: 'CHG-ANR-SCHED', requestTime: '09/02/2026 ; 12:32', respondTime: '09/02/2026 ; 12:32', result: 'Failed',
+    rawResponse:
+      '[ eNB_1278_eFemto ] CHG-ANR-SCHED_STATE-"Active",Day="Monday", Hour="9", Minute="0", Duration="12";\n' +
+      'eNB_1278_eFemto   wed 09/02/2026 ; 12:32\n' +
+      'M2878 CHANGE SON ANR FUNCTION SCHEDULES : FAILD\n' +
+      '-----------------------------------------------------------\n' +
+      'Reason: NE did not respond within timeout window (30s)\n' +
+      'Error Code: TIMEOUT_NO_ACK\n' +
+      '-----------------------------------------------------------\n' +
+      'Count = 0\n;'
+  },
+  { id: 'r4', neName: 'eNB_1278_eFemto', neId: 'eNB_1278', commandName: 'CHG-ANR-SCHED', requestTime: '09/02/2026 ; 12:32', respondTime: '09/02/2026 ; 12:32', result: 'Completed',
+    rawResponse:
+      '[ eNB_1278_eFemto ] CHG-ANR-SCHED_STATE-"Active",Day="Everyday", Hour="6", Minute="0", Duration="18";\n' +
+      'eNB_1278_eFemto   wed 09/02/2026 ; 12:32\n' +
+      'M2878 CHANGE SON ANR FUNCTION SCHEDULES : COMPLD\n' +
+      '-----------------------------------------------------------\n' +
+      'ANR_STATE            DAY               Hour   Minute  Duration\n' +
+      '-----------------------------------------------------------\n' +
+      'Active => Active      Everyday          6 => 6   0 => 0   18 => 18\n' +
+      '-----------------------------------------------------------\n' +
+      'Count = 1\n;'
+  },
+  { id: 'r5', neName: 'eNB_1278_eFemto', neId: 'eNB_1278', commandName: 'CHG-ANR-SCHED', requestTime: '09/02/2026 ; 12:32', respondTime: '09/02/2026 ; 12:32', result: 'Completed',
+    rawResponse:
+      '[ eNB_1278_eFemto ] CHG-ANR-SCHED_STATE-"Active",Day="Tuesday", Hour="10", Minute="30", Duration="8";\n' +
+      'eNB_1278_eFemto   wed 09/02/2026 ; 12:32\n' +
+      'M2878 CHANGE SON ANR FUNCTION SCHEDULES : COMPLD\n' +
+      '-----------------------------------------------------------\n' +
+      'ANR_STATE            DAY               Hour   Minute  Duration\n' +
+      '-----------------------------------------------------------\n' +
+      'Active => Active      Tuesday => Tuesday 10 => 10 30 => 30  8 => 8\n' +
+      '-----------------------------------------------------------\n' +
+      'Count = 1\n;'
+  },
+  { id: 'r6', neName: 'eNB_1278_eFemto', neId: 'eNB_1278', commandName: 'CHG-ANR-SCHED', requestTime: '09/02/2026 ; 12:32', respondTime: '09/02/2026 ; 12:32', result: 'Completed',
+    rawResponse:
+      '[ eNB_1278_eFemto ] CHG-ANR-SCHED_STATE-"Active",Day="Wednesday", Hour="14", Minute="0", Duration="4";\n' +
+      'eNB_1278_eFemto   wed 09/02/2026 ; 12:32\n' +
+      'M2878 CHANGE SON ANR FUNCTION SCHEDULES : COMPLD\n' +
+      '-----------------------------------------------------------\n' +
+      'ANR_STATE            DAY               Hour   Minute  Duration\n' +
+      '-----------------------------------------------------------\n' +
+      'Active => Active      Wednesday => Wednesday 14 => 14 0 => 0   4 => 4\n' +
+      '-----------------------------------------------------------\n' +
+      'Count = 1\n;'
+  },
+  { id: 'r7', neName: 'eNB_1278_eFemto', neId: 'eNB_1278', commandName: 'CHG-ANR-SCHED', requestTime: '09/02/2026 ; 12:32', respondTime: '09/02/2026 ; 12:32', result: 'Completed',
+    rawResponse:
+      '[ eNB_1278_eFemto ] CHG-ANR-SCHED_STATE-"Active",Day="Everyday", Hour="0", Minute="0", Duration="24";\n' +
+      'eNB_1278_eFemto   wed 09/02/2026 ; 12:32\n' +
+      'M2878 CHANGE SON ANR FUNCTION SCHEDULES : COMPLD\n' +
+      '-----------------------------------------------------------\n' +
+      'ANR_STATE            DAY               Hour   Minute  Duration\n' +
+      '-----------------------------------------------------------\n' +
+      'Active => Active      Everyday          0 => 0   0 => 0   24 => 24\n' +
+      '-----------------------------------------------------------\n' +
+      'Count = 1\n;'
+  }
 ];
 
 export const PARENT_EMS_OPTIONS = [
