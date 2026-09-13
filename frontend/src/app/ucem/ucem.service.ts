@@ -227,9 +227,19 @@ export class UcemService {
 
   readonly rows = signal<ExecutionRow[]>(MOCK_ROWS);
   readonly expandedRowId = signal<string | null>('r1');
-  readonly page = signal(2);
+  readonly page = signal(1);
   readonly pageSize = signal(7);
-  readonly totalPages = signal(10);
+  readonly totalPages = computed(() => Math.max(1, Math.ceil(this.rows().length / this.pageSize())));
+  readonly currentPage = computed(() => Math.min(this.page(), this.totalPages()));
+  readonly pagedRows = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize();
+    return this.rows().slice(start, start + this.pageSize());
+  });
+
+  setPageSize(size: number): void {
+    this.pageSize.set(size);
+    this.page.set(1);
+  }
 
   readonly batch = signal<BatchItem[]>([]);
 

@@ -59,7 +59,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (row of ucem.rows(); track row.id) {
+          @for (row of ucem.pagedRows(); track row.id) {
             <tr class="data-row" (click)="ucem.toggleRowExpand(row.id)">
               <td class="link-cell">{{ row.neName }}</td>
               <td>{{ row.neId }}</td>
@@ -97,14 +97,14 @@
     </div>
 
     <div class="pagination">
-      <button type="button" class="icon-btn" [disabled]="ucem.page() <= 1" (click)="ucem.page.set(ucem.page() - 1)">
+      <button type="button" class="icon-btn" [disabled]="ucem.currentPage() <= 1" (click)="ucem.page.set(ucem.currentPage() - 1)">
         <mat-icon>chevron_left</mat-icon>
       </button>
-      <span>{{ ucem.page() | number:'2.0-0' }} of {{ ucem.totalPages() }}</span>
-      <button type="button" class="icon-btn" [disabled]="ucem.page() >= ucem.totalPages()" (click)="ucem.page.set(ucem.page() + 1)">
+      <span>{{ ucem.currentPage() | number:'2.0-0' }} of {{ ucem.totalPages() }}</span>
+      <button type="button" class="icon-btn" [disabled]="ucem.currentPage() >= ucem.totalPages()" (click)="ucem.page.set(ucem.currentPage() + 1)">
         <mat-icon>chevron_right</mat-icon>
       </button>
-      <select class="page-size" [ngModel]="ucem.pageSize()" (ngModelChange)="ucem.pageSize.set($event)">
+      <select class="page-size" [ngModel]="ucem.pageSize()" (ngModelChange)="ucem.setPageSize($event)">
         <option [ngValue]="7">07 Row</option>
         <option [ngValue]="10">10 Row</option>
         <option [ngValue]="25">25 Row</option>
