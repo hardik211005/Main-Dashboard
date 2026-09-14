@@ -45,8 +45,6 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Only authenticated routes render this component, so the idle timer
-    // naturally starts/stops with the user's session.
     this.idleTimeout.start();
   }
 

@@ -13,7 +13,6 @@ import { UcemService } from '../ucem.service';
 export class FavouritesDialogComponent {
   constructor(public ucem: UcemService) {}
 
-  /** Jump straight into the Command Builder for this favourite NE. */
   select(id: string): void {
     this.ucem.selectNe(id);
     this.ucem.closeFavouritesDialog();

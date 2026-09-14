@@ -8,8 +8,6 @@
   overflow: hidden;
 }
 
-// CLI/Batch toggle now lives inside the left (NE List) panel, right above the
-// tree, instead of spanning the whole page above all three panels.
 .ucem-tabs {
   display: flex;
   gap: 6px;
@@ -63,7 +61,6 @@
   grid-template-rows: minmax(0, 1fr);
   gap: 16px;
 
-  // Batch mode: left panel keeps its width, batch table takes the rest.
   &.batch-mode {
     grid-template-columns: 300px 1fr;
   }

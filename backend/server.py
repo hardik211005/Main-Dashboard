@@ -241,8 +241,6 @@ def generate_username(data, users):
     return candidate
 
 
-# ---------------- Authentication ----------------
-
 @app.route("/api/check-username", methods=["GET"])
 def check_username():
     username = request.args.get("username", "").strip()
@@ -327,9 +325,6 @@ def login():
         "user": resolved_user(user),
     })
 
-
-# --- REPLACE the entire old @app.route("/api/forgot-password", methods=["POST"])
-# --- block (the whole forgot_password() function) with these THREE routes ---
 
 @app.route("/api/forgot-password/send-otp", methods=["POST"])
 def send_otp():
@@ -461,8 +456,6 @@ def me():
     return jsonify({"user": resolved_user(user) if user else request.user})
 
 
-# ---------------- Dashboard ----------------
-
 @app.route("/api/dashboard", methods=["GET"])
 @token_required
 def get_dashboard():
@@ -477,8 +470,6 @@ def get_dashboard():
     except Exception as e:
         return jsonify({"message": f"Failed to load dashboard data: {str(e)}"}), 500
 
-
-# ---------------- UCEM: Favourite NEs ----------------
 
 @app.route("/api/favourites", methods=["GET"])
 @token_required
@@ -508,8 +499,6 @@ def remove_favourite(node_id):
     save_favourites_map(favs)
     return jsonify({"favourites": favs[request.user["id"]]})
 
-
-# ---------------- Access Control: Roles ----------------
 
 @app.route("/api/roles", methods=["GET"])
 @token_required
@@ -599,8 +588,6 @@ def delete_role(role_id):
     write_json(ROLES_FILE, roles)
     return jsonify({"message": "Role deleted"})
 
-
-# ---------------- Access Control: Users ----------------
 
 @app.route("/api/access-users", methods=["GET"])
 @token_required
@@ -720,8 +707,6 @@ def delete_access_user(user_id):
     return jsonify({"message": "User deleted"})
 
 
-# ---------------- Real-time dashboard WebSocket ----------------
-
 def broadcast(event):
     dead = []
     message = json.dumps(event)
@@ -742,9 +727,6 @@ def broadcast(event):
 
 @sock.route("/ws")
 def websocket(ws):
-    # Authenticate using the first WebSocket message instead of putting
-    # the JWT in the URL. Browser WebSocket clients cannot set Authorization
-    # headers directly.
     try:
         raw = ws.receive()
         if not raw:
@@ -771,7 +753,6 @@ def websocket(ws):
             raw = ws.receive()
             if raw is None:
                 break
-            # Client messages are intentionally ignored after authentication.
     finally:
         with ws_lock:
             ws_clients.discard(ws)
@@ -833,8 +814,6 @@ def simulate_status_change():
 
     return jsonify({"message": "Status updated", "event": event})
 
-
-# ---------------- Existing employee API ----------------
 
 @app.route("/api/employees", methods=["GET"])
 @token_required
@@ -905,9 +884,6 @@ def delete_employee(employee_id):
 
 
 if __name__ == "__main__":
-    # Render (and most hosts) give you the port to bind via $PORT and expect
-    # 0.0.0.0 rather than localhost. Debug mode stays off unless you
-    # explicitly set FLASK_DEBUG=1 locally.
     port = int(os.environ.get("PORT", 5050))
     debug = os.environ.get("FLASK_DEBUG", "0") == "1"
     app.run(host="0.0.0.0", port=port, debug=debug, threaded=True, use_reloader=False)

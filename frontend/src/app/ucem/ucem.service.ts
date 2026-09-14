@@ -322,7 +322,7 @@ export class UcemService {
       .get<{ favourites: string[] }>(`${this.apiUrl}/favourites`, { headers: this.authHeaders() })
       .subscribe({
         next: res => this.favourites.set(new Set(res.favourites)),
-        error: () => {} // no token yet / offline - keep local (empty) state
+        error: () => {}
       });
   }
 
@@ -330,7 +330,6 @@ export class UcemService {
     event?.stopPropagation();
     const wasFavourite = this.favourites().has(id);
 
-    // optimistic UI update so the star flips instantly
     this.favourites.update(set => {
       const next = new Set(set);
       wasFavourite ? next.delete(id) : next.add(id);
@@ -345,7 +344,6 @@ export class UcemService {
     request$.subscribe({
       next: res => this.favourites.set(new Set(res.favourites)),
       error: () => {
-        // backend save failed - roll back the optimistic change
         this.favourites.update(set => {
           const next = new Set(set);
           wasFavourite ? next.add(id) : next.delete(id);
@@ -400,7 +398,6 @@ export class UcemService {
   }
 
   loadRecent(): void {
-    // Simulated "last used" values
     const cmd = this.selectedCommand();
     if (!cmd) return;
     if (cmd.id === 'CHG-ANR-SCHED') {
@@ -408,8 +405,6 @@ export class UcemService {
     }
   }
 
-  // Execute only unlocks once an NE + command are chosen AND every parameter
-  // the command needs actually has a value (not left blank after Erase, etc).
   readonly canExecute = computed<boolean>(() => {
     const ne = this.selectedNe();
     const cmd = this.selectedCommand();
@@ -465,8 +460,6 @@ export class UcemService {
 
     this.rows.update(list => [newRow, ...list]);
 
-    // While ANR_State is Inactive, the command stays "Running" indefinitely.
-    // It only resolves to Completed/Failed once ANR_State is Active.
     if (staysRunning) return;
 
     setTimeout(() => {
@@ -492,18 +485,15 @@ export class UcemService {
   private parentEmsSnapshot: Set<string> = new Set(PARENT_EMS_OPTIONS);
 
   openFilterDialog(): void {
-    // remember what was applied before, so Cancel/X can revert to it
     this.parentEmsSnapshot = new Set(this.selectedParentEms());
     this.filterDialogOpen.set(true);
   }
 
-  /** Cancel / X — discard whatever was toggled inside the dialog this time. */
   closeFilterDialog(): void {
     this.selectedParentEms.set(this.parentEmsSnapshot);
     this.filterDialogOpen.set(false);
   }
 
-  /** Apply — keep the selection as-is (it's already live) and just close. */
   applyFilterDialog(): void {
     this.filterDialogOpen.set(false);
   }

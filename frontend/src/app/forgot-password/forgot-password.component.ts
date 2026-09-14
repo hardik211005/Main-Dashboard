@@ -27,8 +27,6 @@ type Step = 'email' | 'otp' | 'reset';
   styleUrl: './forgot-password.component.scss'
 })
 export class ForgotPasswordComponent implements OnInit, OnDestroy {
-  // All state that changes async (HTTP callbacks, setInterval/setTimeout)
-  // MUST be a signal in a zoneless app, otherwise the view never repaints.
   step = signal<Step>('email');
   loading = signal(false);
   hidePassword = signal(true);
