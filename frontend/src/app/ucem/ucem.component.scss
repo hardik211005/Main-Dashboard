@@ -8,18 +8,22 @@
   overflow: hidden;
 }
 
+// CLI/Batch toggle now lives inside the left (NE List) panel, right above the
+// tree, instead of spanning the whole page above all three panels.
 .ucem-tabs {
   display: flex;
   gap: 6px;
-  margin-bottom: 14px;
+  padding: 12px 16px 0;
+  border-bottom: 1px solid #eef0f5;
+  flex: 0 0 auto;
 }
 
 .tab {
-  padding: 8px 22px;
+  padding: 8px 18px;
   border-radius: 8px 8px 0 0;
   border: none;
   background: transparent;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: #9aa0ab;
   cursor: pointer;
@@ -58,6 +62,11 @@
   grid-template-columns: 300px 340px 1fr;
   grid-template-rows: minmax(0, 1fr);
   gap: 16px;
+
+  // Batch mode: left panel keeps its width, batch table takes the rest.
+  &.batch-mode {
+    grid-template-columns: 300px 1fr;
+  }
 }
 
 .panel {
@@ -68,11 +77,13 @@
   overflow: hidden;
 }
 
-.batch-panel {
-  background: #fff;
-  border-radius: 12px;
+.panel-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-batch {
   padding: 18px 20px;
-  flex: 1 1 auto;
   overflow: auto;
 }
 
@@ -104,7 +115,8 @@
 }
 
 :host-context(.dark-theme) {
-  .panel, .batch-panel { background: #1a2334; box-shadow: none; }
+  .panel { background: #1a2334; box-shadow: none; }
+  .ucem-tabs { border-color: #2a3448; }
   .batch-table th { background: #202a3b; color: #aeb8cc; }
   .batch-table td { border-color: #2a3448; }
   .mobile-switcher button { background: #202a3b; border-color: #303b50; color: #aeb8cc; }
@@ -113,7 +125,8 @@
 @media (max-width: 1100px) {
   .mobile-switcher { display: flex; }
 
-  .ucem-grid {
+  .ucem-grid,
+  .ucem-grid.batch-mode {
     grid-template-columns: 1fr;
   }
 

@@ -1,52 +1,55 @@
 <div class="ucem-page">
-  <div class="ucem-tabs">
-    <button type="button" class="tab" [class.active]="activeTab() === 'CLI'" (click)="activeTab.set('CLI')">CLI</button>
-    <button type="button" class="tab" [class.active]="activeTab() === 'Batch'" (click)="activeTab.set('Batch')">Batch</button>
-  </div>
-
   @if (activeTab() === 'CLI') {
     <div class="mobile-switcher">
       <button type="button" [class.active]="mobilePanel() === 'list'" (click)="mobilePanel.set('list')">NE List</button>
       <button type="button" [class.active]="mobilePanel() === 'builder'" (click)="mobilePanel.set('builder')">Builder</button>
       <button type="button" [class.active]="mobilePanel() === 'response'" (click)="mobilePanel.set('response')">Response</button>
     </div>
+  }
 
-    <div class="ucem-grid">
-      <div class="panel panel-list" [class.mobile-hidden]="mobilePanel() !== 'list'">
-        <app-ne-tree></app-ne-tree>
+  <div class="ucem-grid" [class.batch-mode]="activeTab() === 'Batch'">
+    <div class="panel panel-list" [class.mobile-hidden]="activeTab() === 'CLI' && mobilePanel() !== 'list'">
+      <div class="ucem-tabs">
+        <button type="button" class="tab" [class.active]="activeTab() === 'CLI'" (click)="activeTab.set('CLI')">CLI</button>
+        <button type="button" class="tab" [class.active]="activeTab() === 'Batch'" (click)="activeTab.set('Batch')">Batch</button>
       </div>
+      <app-ne-tree></app-ne-tree>
+    </div>
+
+    @if (activeTab() === 'CLI') {
       <div class="panel panel-builder" [class.mobile-hidden]="mobilePanel() !== 'builder'">
         <app-command-builder></app-command-builder>
       </div>
       <div class="panel panel-response" [class.mobile-hidden]="mobilePanel() !== 'response'">
         <app-response-panel></app-response-panel>
       </div>
-    </div>
-  } @else {
-    <div class="batch-panel">
-      <h2 class="panel-title">Batch Queue</h2>
-      @if (ucem.batch().length === 0) {
-        <div class="batch-empty">No commands added to batch yet. Build a command in the CLI tab and click "Add to Batch".</div>
-      } @else {
-        <table class="batch-table">
-          <thead>
-            <tr><th>NE</th><th>Command</th><th>Parameters</th><th></th></tr>
-          </thead>
-          <tbody>
-            @for (item of ucem.batch(); track item.id) {
-              <tr>
-                <td>{{ item.neLabel }}</td>
-                <td>{{ item.commandName }}</td>
-                <td>{{ item.paramsSummary }}</td>
-                <td><button type="button" class="icon-btn" (click)="ucem.removeFromBatch(item.id)"><mat-icon>delete_outline</mat-icon></button></td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      }
-    </div>
-  }
+    } @else {
+      <div class="panel panel-batch">
+        <h2 class="panel-title">Batch Queue</h2>
+        @if (ucem.batch().length === 0) {
+          <div class="batch-empty">No commands added to batch yet. Build a command in the CLI tab and click "Add to Batch".</div>
+        } @else {
+          <table class="batch-table">
+            <thead>
+              <tr><th>NE</th><th>Command</th><th>Parameters</th><th></th></tr>
+            </thead>
+            <tbody>
+              @for (item of ucem.batch(); track item.id) {
+                <tr>
+                  <td>{{ item.neLabel }}</td>
+                  <td>{{ item.commandName }}</td>
+                  <td>{{ item.paramsSummary }}</td>
+                  <td><button type="button" class="icon-btn" (click)="ucem.removeFromBatch(item.id)"><mat-icon>delete_outline</mat-icon></button></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+    }
+  </div>
 </div>
 
 <app-node-info-popover></app-node-info-popover>
 <app-ne-filter-dialog></app-ne-filter-dialog>
+<app-favourites-dialog></app-favourites-dialog>

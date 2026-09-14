@@ -1,7 +1,7 @@
 <div class="ne-tree">
   <div class="tree-top">
-    <button type="button" class="fav-link" (click)="ucem.showFavouritesOnly.set(!ucem.showFavouritesOnly())">
-      {{ ucem.showFavouritesOnly() ? 'Show All' : 'View Favourites' }}
+    <button type="button" class="fav-link" (click)="ucem.openFavouritesDialog()">
+      View Favourites
     </button>
     <button type="button" class="icon-btn" (click)="ucem.openFilterDialog()" title="Filter">
       <mat-icon>filter_list</mat-icon>

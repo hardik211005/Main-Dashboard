@@ -43,6 +43,7 @@ BLACKLIST_FILE = os.path.join(BASE_DIR, "data", "blacklist.json")
 EMPLOYEES_FILE = os.path.join(BASE_DIR, "data", "employees.json")
 DASHBOARD_FILE = os.path.join(BASE_DIR, "data", "dashboard.json")
 ROLES_FILE = os.path.join(BASE_DIR, "data", "roles.json")
+FAVOURITES_FILE = os.path.join(BASE_DIR, "data", "favourites.json")
  
 ws_clients = set()
 ws_lock = threading.Lock()
@@ -89,6 +90,23 @@ def read_json(path):
 def write_json(path, data):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
+
+
+def read_json_obj(path, default):
+    """Like read_json but for dict-shaped stores (favourites is keyed by user id)."""
+    if not os.path.exists(path):
+        return default
+    with open(path, "r", encoding="utf-8") as f:
+        content = f.read().strip()
+        return json.loads(content) if content else default
+
+
+def get_favourites_map():
+    return read_json_obj(FAVOURITES_FILE, {})
+
+
+def save_favourites_map(data):
+    write_json(FAVOURITES_FILE, data)
 
 
 def get_roles():
@@ -458,6 +476,37 @@ def get_dashboard():
         return jsonify(data)
     except Exception as e:
         return jsonify({"message": f"Failed to load dashboard data: {str(e)}"}), 500
+
+
+# ---------------- UCEM: Favourite NEs ----------------
+
+@app.route("/api/favourites", methods=["GET"])
+@token_required
+def list_favourites():
+    favs = get_favourites_map()
+    return jsonify({"favourites": favs.get(request.user["id"], [])})
+
+
+@app.route("/api/favourites/<node_id>", methods=["PUT"])
+@token_required
+def add_favourite(node_id):
+    favs = get_favourites_map()
+    user_favs = set(favs.get(request.user["id"], []))
+    user_favs.add(node_id)
+    favs[request.user["id"]] = sorted(user_favs)
+    save_favourites_map(favs)
+    return jsonify({"favourites": favs[request.user["id"]]})
+
+
+@app.route("/api/favourites/<node_id>", methods=["DELETE"])
+@token_required
+def remove_favourite(node_id):
+    favs = get_favourites_map()
+    user_favs = set(favs.get(request.user["id"], []))
+    user_favs.discard(node_id)
+    favs[request.user["id"]] = sorted(user_favs)
+    save_favourites_map(favs)
+    return jsonify({"favourites": favs[request.user["id"]]})
 
 
 # ---------------- Access Control: Roles ----------------

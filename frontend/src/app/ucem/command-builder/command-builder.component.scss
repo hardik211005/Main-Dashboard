@@ -74,7 +74,7 @@
   outline: none;
   color: inherit;
 
-  &:focus { border-color: #3d5be0; }
+  &:focus { border-color: #082192; }
 }
 
 .params-header {
@@ -109,7 +109,7 @@
 .link-btn {
   background: none;
   border: none;
-  color: #3d5be0;
+  color: #061e85;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -134,14 +134,14 @@
 }
 
 .btn-primary {
-  background: #3d5be0;
+  background: #0a207f;
   color: #fff;
 }
 
 .btn-secondary {
   background: #fff;
-  color: #3d5be0;
-  border: 1px solid #3d5be0;
+  color: #0c1f75;
+  border: 1px solid #10278d;
 }
 
 .no-node {

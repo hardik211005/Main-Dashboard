@@ -1,4 +1,5 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import {
   BatchItem,
   CircleGroup,
@@ -7,6 +8,7 @@ import {
   NeItem,
   NodeStatus
 } from './ucem.models';
+import { environment } from '../../environments/environment';
 
 function ne(id: string, circle: string, status: NodeStatus, overrides: Partial<NeItem['details']> = {}): NeItem {
   return {
@@ -215,11 +217,19 @@ export const PARENT_EMS_OPTIONS = [
 
 @Injectable({ providedIn: 'root' })
 export class UcemService {
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = environment.apiUrl;
+
   readonly circles = signal<CircleGroup[]>(MOCK_CIRCLES);
   readonly selectedNeId = signal<string | null>(null);
   readonly favourites = signal<Set<string>>(new Set());
   readonly showFavouritesOnly = signal(false);
+  readonly favouritesDialogOpen = signal(false);
   readonly searchTerm = signal('');
+
+  constructor() {
+    this.loadFavourites();
+  }
 
   readonly category = signal<string | null>(null);
   readonly commandId = signal<string | null>(null);
@@ -298,14 +308,56 @@ export class UcemService {
     this.selectedNeId.set(id);
   }
 
+  private authHeaders() {
+    const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+    return { Authorization: `Bearer ${token}` };
+  }
+
+  private loadFavourites(): void {
+    this.http
+      .get<{ favourites: string[] }>(`${this.apiUrl}/favourites`, { headers: this.authHeaders() })
+      .subscribe({
+        next: res => this.favourites.set(new Set(res.favourites)),
+        error: () => {} // no token yet / offline - keep local (empty) state
+      });
+  }
+
   toggleFavourite(id: string, event?: Event): void {
     event?.stopPropagation();
+    const wasFavourite = this.favourites().has(id);
+
+    // optimistic UI update so the star flips instantly
     this.favourites.update(set => {
       const next = new Set(set);
-      next.has(id) ? next.delete(id) : next.add(id);
+      wasFavourite ? next.delete(id) : next.add(id);
       return next;
     });
+
+    const headers = this.authHeaders();
+    const request$ = wasFavourite
+      ? this.http.delete<{ favourites: string[] }>(`${this.apiUrl}/favourites/${id}`, { headers })
+      : this.http.put<{ favourites: string[] }>(`${this.apiUrl}/favourites/${id}`, {}, { headers });
+
+    request$.subscribe({
+      next: res => this.favourites.set(new Set(res.favourites)),
+      error: () => {
+        // backend save failed - roll back the optimistic change
+        this.favourites.update(set => {
+          const next = new Set(set);
+          wasFavourite ? next.add(id) : next.delete(id);
+          return next;
+        });
+      }
+    });
   }
+
+  openFavouritesDialog(): void { this.favouritesDialogOpen.set(true); }
+  closeFavouritesDialog(): void { this.favouritesDialogOpen.set(false); }
+
+  readonly favouriteNes = computed<NeItem[]>(() => {
+    const favs = this.favourites();
+    return this.allNes().filter(n => favs.has(n.id));
+  });
 
   setCategory(cat: string): void {
     this.category.set(cat);
@@ -351,6 +403,21 @@ export class UcemService {
       this.paramValues.set({ Cell_Num: 3, ANR_State: 'Inactive', Day: 'Sunday', Hour: '0' });
     }
   }
+
+  // Execute only unlocks once an NE + command are chosen AND every parameter
+  // the command needs actually has a value (not left blank after Erase, etc).
+  readonly canExecute = computed<boolean>(() => {
+    const ne = this.selectedNe();
+    const cmd = this.selectedCommand();
+    if (!ne || !cmd) return false;
+
+    const values = this.paramValues();
+    return cmd.parameters.every(p => {
+      const v = values[p.key];
+      if (p.type === 'number') return typeof v === 'number' && !Number.isNaN(v);
+      return v !== undefined && v !== null && String(v).trim() !== '';
+    });
+  });
 
   addToBatch(): void {
     const ne = this.selectedNe();

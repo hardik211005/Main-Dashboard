@@ -1,0 +1,34 @@
+@if (ucem.favouritesDialogOpen()) {
+  <div class="overlay-backdrop" (click)="ucem.closeFavouritesDialog()">
+    <div class="fav-card" (click)="$event.stopPropagation()">
+      <div class="fav-header">
+        <span>View Favourites</span>
+        <button type="button" class="icon-btn" (click)="ucem.closeFavouritesDialog()"><mat-icon>close</mat-icon></button>
+      </div>
+
+      <div class="fav-body">
+        @if (ucem.favouriteNes().length === 0) {
+          <div class="fav-empty">No favourites yet. Tap the star on an NE, or from its Node Info panel, to add one.</div>
+        } @else {
+          @for (node of ucem.favouriteNes(); track node.id) {
+            <div class="fav-row" (click)="select(node.id)">
+              <span class="dot" [ngClass]="'dot-' + node.status"></span>
+              <div class="fav-info">
+                <div class="fav-name">{{ node.label }}</div>
+                <div class="fav-circle">{{ node.circle }}</div>
+              </div>
+              <button
+                type="button"
+                class="icon-btn star"
+                title="Remove favourite"
+                (click)="ucem.toggleFavourite(node.id, $event)"
+              >
+                <mat-icon>star</mat-icon>
+              </button>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+}

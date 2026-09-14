@@ -8,6 +8,7 @@ import { CommandBuilderComponent } from './command-builder/command-builder.compo
 import { ResponsePanelComponent } from './response-panel/response-panel.component';
 import { NodeInfoPopoverComponent } from './node-info-popover/node-info-popover.component';
 import { NeFilterDialogComponent } from './ne-filter-dialog/ne-filter-dialog.component';
+import { FavouritesDialogComponent } from './favourites-dialog/favourites-dialog.component';
 
 type MobilePanel = 'list' | 'builder' | 'response';
 
@@ -21,7 +22,8 @@ type MobilePanel = 'list' | 'builder' | 'response';
     CommandBuilderComponent,
     ResponsePanelComponent,
     NodeInfoPopoverComponent,
-    NeFilterDialogComponent
+    NeFilterDialogComponent,
+    FavouritesDialogComponent
   ],
   templateUrl: './ucem.component.html',
   styleUrl: './ucem.component.scss'

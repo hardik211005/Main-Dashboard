@@ -59,7 +59,7 @@
                 />
               } @else {
                 <app-select
-                  [value]="ucem.paramValues()[param.key] ?? null"
+                  [value]="ucem.paramValues()[param.key]"
                   [options]="param.options || []"
                   placeholder="Select"
                   (valueChange)="ucem.updateParam(param.key, $event)"
@@ -73,7 +73,7 @@
 
     <div class="cb-sticky-bottom">
       <button type="button" class="btn btn-secondary" [disabled]="!ucem.selectedCommand()" (click)="ucem.addToBatch()">Add to Batch</button>
-      <button type="button" class="btn btn-primary" [disabled]="!ucem.selectedCommand()" (click)="ucem.execute()">Execute</button>
+      <button type="button" class="btn btn-primary" [disabled]="!ucem.canExecute()" (click)="ucem.execute()">Execute</button>
     </div>
   } @else {
     <div class="no-node">Select an NE from the list to build a command.</div>
