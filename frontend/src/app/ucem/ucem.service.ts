@@ -268,13 +268,17 @@ export class UcemService {
     const term = this.searchTerm().trim().toLowerCase();
     const favOnly = this.showFavouritesOnly();
     const favs = this.favourites();
+    const parentEms = this.selectedParentEms();
+    const allParentEmsSelected = parentEms.size === PARENT_EMS_OPTIONS.length;
+    const narrowing = favOnly || !allParentEmsSelected;
 
     return this.circles().map(group => {
       let nes = group.nes;
       if (term) nes = nes.filter(n => n.label.toLowerCase().includes(term));
       if (favOnly) nes = nes.filter(n => favs.has(n.id));
+      if (!allParentEmsSelected) nes = nes.filter(n => parentEms.has(n.details.parentEmsName));
       return { ...group, nes };
-    }).filter(g => !this.showFavouritesOnly() || g.nes.length > 0);
+    }).filter(g => !narrowing || g.nes.length > 0);
   });
 
   readonly selectedNe = computed<NeItem | null>(() => {
@@ -485,8 +489,24 @@ export class UcemService {
     this.expandedRowId.update(current => current === id ? null : id);
   }
 
-  openFilterDialog(): void { this.filterDialogOpen.set(true); }
-  closeFilterDialog(): void { this.filterDialogOpen.set(false); }
+  private parentEmsSnapshot: Set<string> = new Set(PARENT_EMS_OPTIONS);
+
+  openFilterDialog(): void {
+    // remember what was applied before, so Cancel/X can revert to it
+    this.parentEmsSnapshot = new Set(this.selectedParentEms());
+    this.filterDialogOpen.set(true);
+  }
+
+  /** Cancel / X — discard whatever was toggled inside the dialog this time. */
+  closeFilterDialog(): void {
+    this.selectedParentEms.set(this.parentEmsSnapshot);
+    this.filterDialogOpen.set(false);
+  }
+
+  /** Apply — keep the selection as-is (it's already live) and just close. */
+  applyFilterDialog(): void {
+    this.filterDialogOpen.set(false);
+  }
 
   toggleParentEms(name: string): void {
     this.selectedParentEms.update(set => {

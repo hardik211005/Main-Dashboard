@@ -18,7 +18,12 @@
         <div class="filter-content">
           @if (activeTab() === 'Parent EMS') {
             <label class="check-row">
-              <input type="checkbox" [checked]="allSelected" (change)="ucem.toggleAllParentEms($any($event.target).checked)" />
+              <input
+                type="checkbox"
+                [checked]="allSelected"
+                [indeterminate]="someSelected"
+                (change)="ucem.toggleAllParentEms($any($event.target).checked)"
+              />
               Select All
             </label>
             @for (name of emsOptions; track name) {

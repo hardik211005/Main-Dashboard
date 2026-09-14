@@ -22,7 +22,15 @@ export class NeFilterDialogComponent {
     return this.emsOptions.every(name => this.ucem.selectedParentEms().has(name));
   }
 
+  /** Some but not all EMS checked - drives the indeterminate (dash) state
+   * on "Select All" so a partial selection doesn't look identical to zero
+   * selected (both used to render as a plain unchecked box). */
+  get someSelected(): boolean {
+    const selected = this.ucem.selectedParentEms();
+    return selected.size > 0 && !this.allSelected;
+  }
+
   apply(): void {
-    this.ucem.closeFilterDialog();
+    this.ucem.applyFilterDialog();
   }
 }
