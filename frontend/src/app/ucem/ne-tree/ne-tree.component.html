@@ -37,8 +37,8 @@
                 />
                 <span class="ne-name" (click)="ucem.openNodeInfo(nodeItem.id, $event)">{{ nodeItem.label }}</span>
                 <span [ngClass]="statusClass(nodeItem.status)"></span>
-                <button type="button" class="icon-btn small" (click)="ucem.toggleFavourite(nodeItem.id, $event)" [title]="ucem.favourites().has(nodeItem.id) ? 'Remove favourite' : 'Add favourite'">
-                  <mat-icon>{{ ucem.favourites().has(nodeItem.id) ? 'star' : 'insert_drive_file' }}</mat-icon>
+                <button type="button" class="icon-btn small fav-star" [class.is-favourite]="ucem.favourites().has(nodeItem.id)" (click)="ucem.toggleFavourite(nodeItem.id, $event)" [title]="ucem.favourites().has(nodeItem.id) ? 'Remove favourite' : 'Add favourite'">
+                  <mat-icon>{{ ucem.favourites().has(nodeItem.id) ? 'star' : 'star_border' }}</mat-icon>
                 </button>
               </div>
             }

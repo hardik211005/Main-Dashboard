@@ -45,6 +45,9 @@
     padding: 2px;
     mat-icon { font-size: 16px; width: 16px; height: 16px; }
   }
+
+  &.fav-star mat-icon { color: #c7cbd4; }
+  &.fav-star.is-favourite mat-icon { color: #f2a93b; }
 }
 
 .search-box {
