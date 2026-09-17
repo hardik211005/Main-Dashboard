@@ -61,8 +61,12 @@
 .info-label { font-size: 11px; color: #9aa0ab; }
 .info-value { font-size: 13px; font-weight: 600; word-break: break-all; }
 
-:host-context(.dark-theme) .info-card {
-  background: #1a2334;
+:host-context(.dark-theme) {
+  .info-card { background: #1a2334; }
+  .icon-btn { color: #aeb8cc; }
+  .icon-btn:hover { background: #202a3b; }
+  .fav-label { color: #aeb8cc; }
+  .info-label { color: #98a2b8; }
 }
 
 @media (max-width: 480px) {

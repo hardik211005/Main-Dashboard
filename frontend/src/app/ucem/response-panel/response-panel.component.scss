@@ -56,7 +56,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  color: #62626c;
+  color: #6f7785;
   padding: 6px;
   border-radius: 6px;
 
@@ -108,7 +108,7 @@
 }
 
 .empty-title { font-size: 16px; font-weight: 700; margin-top: 8px; }
-.empty-sub { font-size: 13px; color: #090909; max-width: 320px; }
+.empty-sub { font-size: 13px; color: #9aa0ab; max-width: 320px; }
 
 .table-scroll {
   flex: 1 1 auto;
@@ -131,7 +131,7 @@
     text-align: left;
     padding: 10px 12px;
     font-weight: 700;
-    color: #070707;
+    color: #667085;
     white-space: nowrap;
     z-index: 1;
   }
@@ -145,7 +145,7 @@
   .data-row { cursor: pointer; }
   .data-row:hover { background: #f8f9fd; }
 
-  .link-cell { color: #2c4ace; font-weight: 600; }
+  .link-cell { color: #3d5be0; font-weight: 600; }
 
   .no-rows {
     text-align: center;
@@ -167,9 +167,9 @@
   }
 }
 
-.result-completed { color: #0fa25e; .dot { background: #219d65; } }
-.result-failed { color: #d52e22; .dot { background: #af251b; } }
-.result-running { color: #425ae3; }
+.result-completed { color: #3f9d72; .dot { background: #3f9d72; } }
+.result-failed { color: #d97b74; .dot { background: #d97b74; } }
+.result-running { color: #6b7fef; }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -188,7 +188,7 @@
     font-family: 'Roboto Mono', monospace;
     font-size: 12px;
     line-height: 1.5;
-    color: #4d5dae;
+    color: #5b6fd6;
     white-space: pre-wrap;
   }
 }
@@ -231,7 +231,15 @@
   td { border-color: #2a3448; }
   .data-row:hover { background: #202a3b; }
   .raw-row td { background: #1a2334; }
-  .page-size { background: #202a3b; border-color: #303b50; }
+  .page-size { background: #202a3b; border-color: #303b50; color: #f4f7fb; }
   .dropdown-menu { background: #1a2334; border-color: #2a3448; }
   .dropdown-menu button:hover { background: #202a3b; }
+  .icon-btn { color: #aeb8cc; }
+  .icon-btn:hover { background: #202a3b; color: #8ea0f7; }
+  .empty-sub { color: #98a2b8; }
+  .no-rows { color: #98a2b8; }
+  .pagination { color: #aeb8cc; }
+  .close-raw { color: #98a2b8; }
+  .raw-block pre { color: #9fb0ff; }
+  .link-cell { color: #8ea0f7; }
 }

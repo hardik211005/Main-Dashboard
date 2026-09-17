@@ -74,7 +74,7 @@
   outline: none;
   color: inherit;
 
-  &:focus { border-color: #0c0c0c; }
+  &:focus { border-color: #3d5be0; }
 }
 
 .params-header {
@@ -109,7 +109,7 @@
 .link-btn {
   background: none;
   border: none;
-  color: #061e85;
+  color: #3d5be0;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -134,14 +134,14 @@
 }
 
 .btn-primary {
-  background: #0a207f;
+  background: #3d5be0;
   color: #fff;
 }
 
 .btn-secondary {
   background: #fff;
-  color: #0c1f75;
-  border: 1px solid #10278d;
+  color: #3d5be0;
+  border: 1px solid #3d5be0;
 }
 
 .no-node {
@@ -155,5 +155,11 @@
 :host-context(.dark-theme) {
   .field-input { background: #202a3b; border-color: #303b50; color: #f4f7fb; }
   .cb-sticky-bottom { background: #1a2334; border-color: #2a3448; }
-  .btn-secondary { background: transparent; }
+  .btn-secondary { background: transparent; color: #8ea0f7; border-color: #8ea0f7; }
+  .icon-btn { color: #aeb8cc; }
+  .icon-btn:hover { background: #202a3b; color: #8ea0f7; }
+  .link-btn { color: #8ea0f7; }
+  .field-label { color: #aeb8cc; }
+  .node-sub { color: #98a2b8; }
+  .no-node { color: #98a2b8; }
 }

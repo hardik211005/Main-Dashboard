@@ -81,7 +81,11 @@
 
 :host-context(.dark-theme) {
   .select-trigger { background: #202a3b; border-color: #303b50; color: #f4f7fb; }
+  .select-trigger.open { border-color: #8ea0f7; }
+  .select-value.placeholder { color: #98a2b8; }
+  .chevron { color: #98a2b8; }
   .select-panel { background: #1a2334; border-color: #2a3448; }
   .select-option:hover { background: #202a3b; }
-  .select-option.selected { background: #26314a; }
+  .select-option.selected { background: #26314a; color: #8ea0f7; }
+  .select-empty { color: #98a2b8; }
 }

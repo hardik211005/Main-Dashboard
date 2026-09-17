@@ -116,8 +116,13 @@
 :host-context(.dark-theme) {
   .filter-card { background: #1a2334; }
   .filter-header, .filter-tabs, .filter-footer { border-color: #2a3448; }
-  .tab-item.active { background: #26314a; }
+  .tab-item { color: #aeb8cc; }
+  .tab-item.active { background: #26314a; color: #8ea0f7; }
   .tab-item:hover:not(.active) { background: #202a3b; }
+  .tab-placeholder { color: #98a2b8; }
+  .icon-btn { color: #aeb8cc; }
+  .icon-btn:hover { color: #8ea0f7; }
+  .btn-secondary { background: transparent; color: #8ea0f7; border-color: #8ea0f7; }
 }
 
 @media (max-width: 520px) {

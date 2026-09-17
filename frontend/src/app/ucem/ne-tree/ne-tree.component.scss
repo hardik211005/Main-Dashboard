@@ -150,4 +150,11 @@
   .circle-group { border-color: #2a3448; }
   .ne-row.selected { background: #26314a; }
   .ne-row:hover { background: #202a3b; }
+  .fav-link { color: #8ea0f7; }
+  .icon-btn { color: #aeb8cc; }
+  .icon-btn:hover { background: #202a3b; color: #8ea0f7; }
+  .icon-btn.fav-star mat-icon { color: #5c6784; }
+  .icon-btn.fav-star.is-favourite mat-icon { color: #f2a93b; }
+  .circle-header mat-icon { color: #98a2b8; }
+  .empty-tree { color: #98a2b8; }
 }

@@ -8,6 +8,8 @@
   overflow: hidden;
 }
 
+// CLI/Batch toggle now lives inside the left (NE List) panel, right above the
+// tree, instead of spanning the whole page above all three panels.
 .ucem-tabs {
   display: flex;
   gap: 6px;
@@ -61,6 +63,7 @@
   grid-template-rows: minmax(0, 1fr);
   gap: 16px;
 
+  // Batch mode: left panel keeps its width, batch table takes the rest.
   &.batch-mode {
     grid-template-columns: 300px 1fr;
   }
@@ -114,9 +117,14 @@
 :host-context(.dark-theme) {
   .panel { background: #1a2334; box-shadow: none; }
   .ucem-tabs { border-color: #2a3448; }
+  .tab { color: #98a2b8; }
+  .tab.active { color: #8ea0f7; border-bottom-color: #8ea0f7; }
   .batch-table th { background: #202a3b; color: #aeb8cc; }
   .batch-table td { border-color: #2a3448; }
+  .batch-empty { color: #98a2b8; }
+  .icon-btn { color: #d97b74; }
   .mobile-switcher button { background: #202a3b; border-color: #303b50; color: #aeb8cc; }
+  .mobile-switcher button.active { background: #3d5be0; color: #fff; border-color: #3d5be0; }
 }
 
 @media (max-width: 1100px) {
